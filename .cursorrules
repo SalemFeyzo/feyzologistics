@@ -1,0 +1,48 @@
+## Code Style & Quality
+
+- Prefer TypeScript over JavaScript. Use explicit types, avoid `any`.
+- Use async/await instead of promises with .then() chains.
+- Always handle errors with try/catch blocks or proper error boundaries.
+- Prefer functional components with hooks over class components.
+
+## Next.js Specific
+
+- Use App Router patterns and conventions (app directory structure).
+- Leverage Server Components by default, use 'use client' only when necessary.
+- Use Next.js Image component for all images.
+- Follow Next.js file-based routing conventions.
+- Use metadata API for SEO instead of Head components in app router.
+
+## React Best Practices
+
+- Use proper dependency arrays in useEffect, useMemo, and useCallback.
+- Extract reusable logic into custom hooks when appropriate.
+- Avoid unnecessary re-renders by memoizing expensive computations.
+- Prefer composition over inheritance.
+
+## Code Organization
+
+- Keep components small and focused on a single responsibility.
+- Extract utilities to separate files in utils/ directory.
+- Use named exports over default exports when possible.
+- Group related imports: external libraries, then internal modules.
+
+## Responses & Communication
+
+- Reply in a concise style. Avoid unnecessary repetition or filler language.
+- When suggesting code changes, explain the reasoning briefly.
+- Always consider performance implications of suggested solutions.
+- Prefer modern ES6+ syntax and features.
+
+## Testing & Documentation
+
+- Write self-documenting code with clear variable and function names.
+- Add comments only when code logic isn't immediately obvious.
+- Consider edge cases and error handling in all solutions.
+
+## UI/UX Considerations
+
+- Follow accessibility best practices (a11y): semantic HTML, ARIA labels, keyboard navigation.
+- Ensure responsive design works on mobile, tablet, and desktop.
+- Use Tailwind utility classes consistently for styling.
+- Follow dark mode patterns using Tailwind's dark: variant.
