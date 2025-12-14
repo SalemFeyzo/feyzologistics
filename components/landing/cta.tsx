@@ -3,6 +3,7 @@
 import { Button } from "@/components/ui/button";
 import { ArrowRight } from "lucide-react";
 import { useTranslations, useLocale } from "next-intl";
+import { Link } from "@/i18n/routing";
 
 export function CTA() {
   const t = useTranslations("CTA");
@@ -19,16 +20,22 @@ export function CTA() {
           <p className="max-w-[700px] text-gray-100 md:text-xl">
             {t("description")}
           </p>
-          <Button
-            size="lg"
-            variant="secondary"
-            className={`group bg-white text-[#1e40af] hover:bg-gray-100 hover:text-[#14b8a6] transition-colors ${isRTL ? "flex-row-reverse" : ""}`}
-          >
-            {t("contactUs")}
-            <ArrowRight
-              className={`h-4 w-4 transition-transform group-hover:translate-x-1 ${isRTL ? "mr-2 rotate-180" : "ml-2"}`}
-            />
-          </Button>
+          <Link href="/contact">
+            <Button
+              size="lg"
+              variant="secondary"
+              className="group bg-white text-[#1e40af] hover:bg-gray-100 hover:text-[#14b8a6] transition-colors"
+            >
+              {t("contactUs")}
+              <ArrowRight
+                className={`h-4 w-4 transition-transform ${
+                  isRTL
+                    ? "ml-2 rotate-180 group-hover:-translate-x-1"
+                    : "ml-2 group-hover:translate-x-1"
+                }`}
+              />
+            </Button>
+          </Link>
         </div>
       </div>
     </section>

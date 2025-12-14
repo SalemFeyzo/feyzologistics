@@ -67,5 +67,212 @@
     "title": "Feyzo Logistics - Streamlined Logistics Delivered with Excellence",
     "description": "Your trusted partner for reliable, efficient, and cost-effective logistics solutions. We connect your business to the world with precision and care.",
     "keywords": "logistics, shipping, freight, supply chain, delivery"
+  },
+  "About": {
+    "hero": {
+      "title": "About Feyzo Logistics",
+      "subtitle": "Connecting Your Business to the World",
+      "description": "Feyzo Logistics is a leading provider of comprehensive logistics solutions, serving businesses worldwide with excellence, reliability, and innovation."
+    },
+    "mission": {
+      "title": "Our Mission",
+      "description": "To empower businesses by delivering seamless, efficient, and cost-effective logistics solutions that enable global reach and growth. We are committed to excellence in every shipment, every delivery, and every customer interaction."
+    },
+    "vision": {
+      "title": "Our Vision",
+      "description": "To become the world's most trusted logistics partner, recognized for innovation, reliability, and exceptional service. We envision a future where businesses can operate globally with complete confidence in their logistics infrastructure."
+    },
+    "values": {
+      "title": "Our Values",
+      "reliability": {
+        "title": "Reliability",
+        "description": "We deliver on our promises, ensuring your shipments arrive on time and in perfect condition, every single time."
+      },
+      "innovation": {
+        "title": "Innovation",
+        "description": "We leverage cutting-edge technology to streamline operations and provide real-time visibility into your supply chain."
+      },
+      "excellence": {
+        "title": "Excellence",
+        "description": "We strive for perfection in every aspect of our service, from customer support to delivery execution."
+      },
+      "integrity": {
+        "title": "Integrity",
+        "description": "We conduct business with honesty, transparency, and ethical practices, building trust with every interaction."
+      }
+    },
+    "stats": {
+      "countries": "Countries Served",
+      "packages": "Packages Delivered",
+      "customers": "Satisfied Customers",
+      "experience": "Years of Experience"
+    }
+  },
+  "AboutMetadata": {
+    "title": "About Us - Feyzo Logistics",
+    "description": "Learn about Feyzo Logistics, our mission, vision, and values. Discover how we're revolutionizing the logistics industry with innovation and excellence.",
+    "keywords": "about us, logistics company, mission, vision, values, shipping company"
+  },
+  "Services": {
+    "hero": {
+      "title": "Our Services",
+      "subtitle": "Comprehensive Logistics Solutions",
+      "description": "From express shipping to supply chain management, we offer end-to-end logistics services tailored to your business needs."
+    },
+    "expressShipping": {
+      "title": "Express Shipping",
+      "description": "Get your packages delivered fast with our express shipping service. Perfect for time-sensitive deliveries.",
+      "features": {
+        "title": "Key Features",
+        "speed": {
+          "title": "Lightning Fast",
+          "description": "Same-day and next-day delivery options available in major cities."
+        },
+        "tracking": {
+          "title": "Real-Time Tracking",
+          "description": "Track your shipment every step of the way with our advanced tracking system."
+        },
+        "coverage": {
+          "title": "Wide Coverage",
+          "description": "Service available across 150+ countries and territories worldwide."
+        },
+        "reliability": {
+          "title": "Reliable Service",
+          "description": "99.9% on-time delivery rate with full insurance coverage."
+        }
+      },
+      "benefits": "Whether you need to send documents, packages, or time-critical shipments, our express shipping service ensures your items reach their destination quickly and securely."
+    },
+    "freightServices": {
+      "title": "Freight Services",
+      "description": "Comprehensive freight solutions for businesses of all sizes. Air, sea, and land freight options available.",
+      "features": {
+        "title": "Key Features",
+        "modes": {
+          "title": "Multiple Transport Modes",
+          "description": "Air, sea, and land freight services to suit your needs and budget."
+        },
+        "capacity": {
+          "title": "Large Capacity",
+          "description": "Handle everything from small parcels to full container loads."
+        },
+        "customs": {
+          "title": "Customs Clearance",
+          "description": "Expert handling of customs documentation and clearance procedures."
+        },
+        "costEffective": {
+          "title": "Cost-Effective",
+          "description": "Competitive rates with flexible pricing options for regular shippers."
+        }
+      },
+      "benefits": "Our freight services are designed to move your cargo efficiently and cost-effectively, whether it's a small shipment or a full container load. We handle all the logistics so you can focus on your business."
+    },
+    "warehousing": {
+      "title": "Warehousing",
+      "description": "State-of-the-art warehousing facilities with inventory management and fulfillment services.",
+      "features": {
+        "title": "Key Features",
+        "facilities": {
+          "title": "Modern Facilities",
+          "description": "Climate-controlled, secure warehouses with 24/7 monitoring and access control."
+        },
+        "management": {
+          "title": "Inventory Management",
+          "description": "Advanced WMS technology for real-time inventory tracking and management."
+        },
+        "fulfillment": {
+          "title": "Order Fulfillment",
+          "description": "Pick, pack, and ship services to streamline your e-commerce operations."
+        },
+        "scalable": {
+          "title": "Scalable Solutions",
+          "description": "Flexible storage options that grow with your business needs."
+        }
+      },
+      "benefits": "Our warehousing solutions provide secure, efficient storage for your inventory with integrated fulfillment services, helping you reduce costs and improve customer satisfaction."
+    },
+    "supplyChain": {
+      "title": "Supply Chain Management",
+      "description": "End-to-end supply chain optimization to streamline your operations and reduce costs.",
+      "features": {
+        "title": "Key Features",
+        "optimization": {
+          "title": "Process Optimization",
+          "description": "Analyze and optimize your supply chain processes for maximum efficiency."
+        },
+        "visibility": {
+          "title": "End-to-End Visibility",
+          "description": "Complete visibility across your entire supply chain with real-time monitoring."
+        },
+        "integration": {
+          "title": "System Integration",
+          "description": "Seamless integration with your existing ERP and business systems."
+        },
+        "consulting": {
+          "title": "Expert Consulting",
+          "description": "Dedicated supply chain consultants to help optimize your operations."
+        }
+      },
+      "benefits": "Our supply chain management services help you optimize operations, reduce costs, and improve efficiency across your entire supply chain, from sourcing to delivery."
+    },
+    "learnMore": "Learn More",
+    "getStarted": "Get Started",
+    "backToServices": "Back to Services",
+    "benefits": "Benefits"
+  },
+  "ServicesMetadata": {
+    "title": "Services - Feyzo Logistics",
+    "description": "Comprehensive logistics services including express shipping, freight services, warehousing, and supply chain management. Solutions tailored to your business needs.",
+    "keywords": "logistics services, shipping, freight, warehousing, supply chain, express delivery"
+  },
+  "Contact": {
+    "hero": {
+      "title": "Contact Us",
+      "subtitle": "Get in Touch",
+      "description": "Have a question or need assistance? We're here to help. Reach out to us and our team will get back to you as soon as possible."
+    },
+    "form": {
+      "title": "Send us a Message",
+      "name": "Full Name",
+      "namePlaceholder": "Enter your full name",
+      "email": "Email Address",
+      "emailPlaceholder": "Enter your email address",
+      "phone": "Phone Number",
+      "phonePlaceholder": "Enter your phone number",
+      "subject": "Subject",
+      "subjectPlaceholder": "What is this regarding?",
+      "message": "Message",
+      "messagePlaceholder": "Tell us how we can help you...",
+      "submit": "Send Message",
+      "submitting": "Sending...",
+      "success": "Thank you! Your message has been sent successfully.",
+      "error": "Something went wrong. Please try again."
+    },
+    "info": {
+      "title": "Contact Information",
+      "description": "You can also reach us through the following channels:",
+      "address": {
+        "label": "Address",
+        "value": "123 Logistics Street, Business District, City, Country 12345"
+      },
+      "phone": {
+        "label": "Phone",
+        "value": "+1 (555) 123-4567"
+      },
+      "email": {
+        "label": "Email",
+        "value": "info@feyzologistics.com"
+      },
+      "hours": {
+        "label": "Business Hours",
+        "value": "Monday - Friday: 9:00 AM - 6:00 PM\nSaturday: 10:00 AM - 4:00 PM\nSunday: Closed"
+      }
+    },
+    "officeHours": "Office Hours"
+  },
+  "ContactMetadata": {
+    "title": "Contact Us - Feyzo Logistics",
+    "description": "Get in touch with Feyzo Logistics. Contact us for inquiries, support, or to learn more about our logistics services. We're here to help.",
+    "keywords": "contact, support, logistics contact, shipping inquiry, customer service"
   }
 }

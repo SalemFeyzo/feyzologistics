@@ -5,6 +5,7 @@ import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { Menu, X } from "lucide-react";
 import { useTranslations } from "next-intl";
+import { Link } from "@/i18n/routing";
 
 export function Navbar() {
   const t = useTranslations("Navbar");
@@ -24,7 +25,7 @@ export function Navbar() {
       dir="ltr"
     >
       <div className="container flex h-20 items-center justify-between px-4 md:px-6 mx-auto">
-        <div className="flex items-center justify-center h-full">
+        <Link href="/" className="flex items-center justify-center h-full">
           <Image
             src="/logo.png"
             alt="Feyzo Logistics"
@@ -41,29 +42,31 @@ export function Navbar() {
               Logistics
             </span>
           </div>
-        </div>
+        </Link>
 
         {/* Desktop Navigation */}
         <div className="hidden md:flex items-center justify-center gap-4 h-full">
-          <a
-            href="#services"
+          <Link
+            href="/services"
             className="text-sm font-medium text-[#1e40af] transition-colors hover:text-[#14b8a6]"
           >
             {t("services")}
-          </a>
-          <a
-            href="#about"
+          </Link>
+          <Link
+            href="/about"
             className="text-sm font-medium text-[#1e40af] transition-colors hover:text-[#14b8a6]"
           >
             {t("about")}
-          </a>
-          <Button
-            variant="outline"
-            size="sm"
-            className="border-[#1e40af] text-[#1e40af] hover:bg-[#1e40af] hover:text-white"
-          >
-            {t("contact")}
-          </Button>
+          </Link>
+          <Link href="/contact">
+            <Button
+              variant="outline"
+              size="sm"
+              className="border-[#1e40af] text-[#1e40af] hover:bg-[#1e40af] hover:text-white"
+            >
+              {t("contact")}
+            </Button>
+          </Link>
           <Button
             size="sm"
             className="bg-linear-to-r from-[#1e40af] to-[#14b8a6] hover:opacity-90 text-white"
@@ -90,29 +93,30 @@ export function Navbar() {
       {isMobileMenuOpen && (
         <div className="md:hidden border-t bg-white/95 backdrop-blur supports-backdrop-filter:bg-white/95 dark:bg-gray-950/95">
           <div className="container px-4 py-4 mx-auto space-y-3">
-            <a
-              href="#services"
+            <Link
+              href="/services"
               onClick={closeMobileMenu}
               className="block text-sm font-medium text-[#1e40af] transition-colors hover:text-[#14b8a6] py-2"
             >
               {t("services")}
-            </a>
-            <a
-              href="#about"
+            </Link>
+            <Link
+              href="/about"
               onClick={closeMobileMenu}
               className="block text-sm font-medium text-[#1e40af] transition-colors hover:text-[#14b8a6] py-2"
             >
               {t("about")}
-            </a>
+            </Link>
             <div className="flex flex-col gap-2 pt-2">
-              <Button
-                variant="outline"
-                size="sm"
-                onClick={closeMobileMenu}
-                className="w-full border-[#1e40af] text-[#1e40af] hover:bg-[#1e40af] hover:text-white"
-              >
-                {t("contact")}
-              </Button>
+              <Link href="/contact" onClick={closeMobileMenu} className="w-full">
+                <Button
+                  variant="outline"
+                  size="sm"
+                  className="w-full border-[#1e40af] text-[#1e40af] hover:bg-[#1e40af] hover:text-white"
+                >
+                  {t("contact")}
+                </Button>
+              </Link>
               <Button
                 size="sm"
                 onClick={closeMobileMenu}

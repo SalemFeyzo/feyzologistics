@@ -3,6 +3,7 @@
 import Image from "next/image";
 import { useTranslations } from "next-intl";
 import { LanguageSwitcher } from "./language-switcher";
+import { Link } from "@/i18n/routing";
 
 export function Footer() {
   const t = useTranslations("Footer");
@@ -28,17 +29,37 @@ export function Footer() {
               {t("services.title")}
             </h3>
             <ul className="space-y-2 text-sm text-gray-600 dark:text-gray-400">
-              <li className="hover:text-[#14b8a6] transition-colors cursor-pointer">
-                {t("services.expressShipping")}
+              <li>
+                <Link
+                  href="/services/express-shipping"
+                  className="hover:text-[#14b8a6] transition-colors cursor-pointer block"
+                >
+                  {t("services.expressShipping")}
+                </Link>
               </li>
-              <li className="hover:text-[#14b8a6] transition-colors cursor-pointer">
-                {t("services.freightServices")}
+              <li>
+                <Link
+                  href="/services/freight-services"
+                  className="hover:text-[#14b8a6] transition-colors cursor-pointer block"
+                >
+                  {t("services.freightServices")}
+                </Link>
               </li>
-              <li className="hover:text-[#14b8a6] transition-colors cursor-pointer">
-                {t("services.warehousing")}
+              <li>
+                <Link
+                  href="/services/warehousing"
+                  className="hover:text-[#14b8a6] transition-colors cursor-pointer block"
+                >
+                  {t("services.warehousing")}
+                </Link>
               </li>
-              <li className="hover:text-[#14b8a6] transition-colors cursor-pointer">
-                {t("services.supplyChain")}
+              <li>
+                <Link
+                  href="/services/supply-chain"
+                  className="hover:text-[#14b8a6] transition-colors cursor-pointer block"
+                >
+                  {t("services.supplyChain")}
+                </Link>
               </li>
             </ul>
           </div>
@@ -47,11 +68,21 @@ export function Footer() {
               {t("company.title")}
             </h3>
             <ul className="space-y-2 text-sm text-gray-600 dark:text-gray-400">
-              <li className="hover:text-[#14b8a6] transition-colors cursor-pointer">
-                {t("company.aboutUs")}
+              <li>
+                <Link
+                  href="/about"
+                  className="hover:text-[#14b8a6] transition-colors cursor-pointer block"
+                >
+                  {t("company.aboutUs")}
+                </Link>
               </li>
-              <li className="hover:text-[#14b8a6] transition-colors cursor-pointer">
-                {t("company.contact")}
+              <li>
+                <Link
+                  href="/contact"
+                  className="hover:text-[#14b8a6] transition-colors cursor-pointer block"
+                >
+                  {t("company.contact")}
+                </Link>
               </li>
               <li className="hover:text-[#14b8a6] transition-colors cursor-pointer">
                 {t("company.careers")}

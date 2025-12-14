@@ -32,14 +32,14 @@ export function Hero() {
           >
             <Button
               size="lg"
-              className={`group bg-white text-[#1e40af] hover:bg-gray-100 ${
-                isRTL ? "flex-row-reverse" : ""
-              }`}
+              className="group bg-white text-[#1e40af] hover:bg-gray-100"
             >
               {t("getStarted")}
               <ArrowRight
-                className={`h-4 w-4 transition-transform group-hover:translate-x-1 ${
-                  isRTL ? "mr-2 rotate-180" : "ml-2"
+                className={`h-4 w-4 transition-transform ${
+                  isRTL
+                    ? "ml-2 rotate-180 group-hover:-translate-x-1"
+                    : "ml-2 group-hover:translate-x-1"
                 }`}
               />
             </Button>
