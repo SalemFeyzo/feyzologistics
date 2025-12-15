@@ -15,11 +15,44 @@ export async function generateMetadata({
 }: Props): Promise<Metadata> {
   const { locale } = await params;
   const t = await getTranslations({ locale, namespace: "ContactMetadata" });
+  
+  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'https://feyzologistics.com';
+  const title = t("title");
+  const description = t("description");
+  const keywords = t("keywords");
+  const ogImage = `${baseUrl}/logo.png`;
 
   return {
-    title: t("title"),
-    description: t("description"),
-    keywords: t("keywords"),
+    title,
+    description,
+    keywords: keywords.split(', '),
+    alternates: {
+      canonical: `${baseUrl}/${locale}/contact`,
+      languages: {
+        'en': `${baseUrl}/en/contact`,
+        'ar': `${baseUrl}/ar/contact`,
+      },
+    },
+    openGraph: {
+      title,
+      description,
+      url: `${baseUrl}/${locale}/contact`,
+      type: 'website',
+      images: [
+        {
+          url: ogImage,
+          width: 1200,
+          height: 630,
+          alt: title,
+        },
+      ],
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title,
+      description,
+      images: [ogImage],
+    },
   };
 }
 

@@ -45,10 +45,42 @@ export async function generateMetadata({
     locale,
     namespace: `Services.${translationKey}`,
   });
+  
+  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'https://feyzologistics.com';
+  const title = `${t("title")} - Feyzo Logistics`;
+  const description = t("description");
+  const ogImage = `${baseUrl}/logo.png`;
 
   return {
-    title: `${t("title")} - Feyzo Logistics`,
-    description: t("description"),
+    title,
+    description,
+    alternates: {
+      canonical: `${baseUrl}/${locale}/services/${slug}`,
+      languages: {
+        'en': `${baseUrl}/en/services/${slug}`,
+        'ar': `${baseUrl}/ar/services/${slug}`,
+      },
+    },
+    openGraph: {
+      title,
+      description,
+      url: `${baseUrl}/${locale}/services/${slug}`,
+      type: 'website',
+      images: [
+        {
+          url: ogImage,
+          width: 1200,
+          height: 630,
+          alt: title,
+        },
+      ],
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title,
+      description,
+      images: [ogImage],
+    },
   };
 }
 
