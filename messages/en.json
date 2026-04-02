@@ -1,0 +1,83 @@
+{
+  "Metadata": {
+    "title": "Feyzo Logistics",
+    "description": "Reliable freight, warehousing, and supply chain solutions tailored to your business.",
+    "ogTitle": "Feyzo Logistics",
+    "ogDescription": "Move goods with confidence. End-to-end logistics built for clarity and speed."
+  },
+  "Navbar": {
+    "services": "Services",
+    "about": "About",
+    "contact": "Contact",
+    "cta": "Get started",
+    "toggleMenu": "Toggle navigation menu",
+    "themeLight": "Use light theme",
+    "themeDark": "Use dark theme",
+    "localeEn": "English",
+    "localeAr": "العربية",
+    "logoAlt": "Feyzo Logistics"
+  },
+  "Hero": {
+    "headline": "Streamlined Logistics\nDelivered with Excellence",
+    "subheadline": "Your trusted partner for reliable, efficient, and cost-effective logistics solutions. We connect your business to the world with precision and care.",
+    "primaryCta": "Talk to us",
+    "secondaryCta": "Our services"
+  },
+  "Services": {
+    "title": "What we do",
+    "subtitle": "Core capabilities designed around reliability and transparency.",
+    "items": [
+      {
+        "title": "Freight forwarding",
+        "description": "Air, ocean, and road options with clear milestones and proactive updates."
+      },
+      {
+        "title": "Warehousing",
+        "description": "Secure storage, inventory visibility, and fulfillment aligned to your SLAs."
+      },
+      {
+        "title": "Customs & compliance",
+        "description": "Documentation and clearance support to reduce delays at borders."
+      },
+      {
+        "title": "Last-mile delivery",
+        "description": "Final delivery scheduling that respects your customers’ expectations."
+      }
+    ]
+  },
+  "About": {
+    "title": "About Feyzo",
+    "body": "We are an independent logistics partner focused on predictable handoffs, honest communication, and measurable delivery performance. Whether you ship regionally or across borders, we align our operations with your timelines and reporting needs."
+  },
+  "Contact": {
+    "title": "Ready to ship?",
+    "body": "Tell us about your lanes, volumes, and deadlines. We will respond with a clear next step.",
+    "cta": "Email us",
+    "whatsappCta": "WhatsApp",
+    "whatsappHint": "Message us on WhatsApp",
+    "phoneHint": "Call us"
+  },
+  "Trust": {
+    "title": "Why teams choose us",
+    "items": [
+      { "value": "24/7", "label": "Operations coverage" },
+      { "value": "40+", "label": "Corridors served" },
+      { "value": "99.2%", "label": "On-time target" }
+    ]
+  },
+  "Footer": {
+    "tagline": "Feyzo Logistics — moving business forward.",
+    "companyName": "Feyzo Logistics",
+    "rights": "All rights reserved.",
+    "navServices": "Services",
+    "navAbout": "About",
+    "navContact": "Contact",
+    "social": {
+      "label": "Social media",
+      "x": "Feyzo on X",
+      "facebook": "Feyzo on Facebook",
+      "instagram": "Feyzo on Instagram",
+      "threads": "Feyzo on Threads"
+    }
+  }
+}
