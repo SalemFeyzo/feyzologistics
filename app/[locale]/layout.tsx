@@ -7,8 +7,10 @@ import {
   getTranslations,
   setRequestLocale,
 } from "next-intl/server";
+import { JsonLd } from "@/components/seo/json-ld";
 import { ThemeProvider } from "@/components/theme-provider";
 import { routing } from "@/i18n/routing";
+import { getBaseUrl } from "@/lib/site";
 import { cn } from "@/lib/utils";
 import "../globals.css";
 
@@ -31,13 +33,21 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const { locale } = await params;
   const t = await getTranslations({ locale, namespace: "Metadata" });
-  const baseUrl =
-    process.env.NEXT_PUBLIC_SITE_URL ?? "https://feyzologistics.com";
+  const baseUrl = getBaseUrl();
+  const pageUrl = `${baseUrl}/${locale}`;
 
   return {
     metadataBase: new URL(baseUrl),
     title: t("title"),
     description: t("description"),
+    robots: {
+      index: true,
+      follow: true,
+      googleBot: {
+        index: true,
+        follow: true,
+      },
+    },
     icons: {
       icon: [
         {
@@ -54,8 +64,10 @@ export async function generateMetadata({
       title: t("ogTitle"),
       description: t("ogDescription"),
       locale: locale === "ar" ? "ar_SA" : "en_US",
+      alternateLocale: locale === "en" ? ["ar_SA"] : ["en_US"],
       type: "website",
-      url: baseUrl,
+      url: pageUrl,
+      siteName: t("ogTitle"),
     },
     twitter: {
       card: "summary_large_image",
@@ -65,6 +77,7 @@ export async function generateMetadata({
     alternates: {
       canonical: `/${locale}`,
       languages: {
+        "x-default": `/${routing.defaultLocale}`,
         en: "/en",
         ar: "/ar",
       },
@@ -104,6 +117,7 @@ export default async function LocaleLayout({
           isRtl ? "font-(family-name:--font-tajawal)" : "font-sans",
         )}
       >
+        <JsonLd locale={locale} />
         <ThemeProvider>
           <NextIntlClientProvider messages={messages}>
             {children}

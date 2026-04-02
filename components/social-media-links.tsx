@@ -1,5 +1,6 @@
 import type { ReactElement } from "react";
 import { getTranslations } from "next-intl/server";
+import { SOCIAL_HANDLE } from "@/lib/site";
 
 type IconProps = { className?: string };
 
@@ -60,8 +61,6 @@ function IconThreads({ className }: IconProps) {
     </svg>
   );
 }
-
-const SOCIAL_HANDLE = "feyzologistics";
 
 const DEFAULT_HREFS = {
   x: `https://x.com/${SOCIAL_HANDLE}`,
