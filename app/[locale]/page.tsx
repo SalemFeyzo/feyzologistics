@@ -1,23 +1,26 @@
-import { LandingNavbar } from "@/components/landing/landing-navbar";
-import { LandingHero } from "@/components/landing/landing-hero";
-import { LandingServices } from "@/components/landing/landing-services";
 import { LandingAbout } from "@/components/landing/landing-about";
-import { LandingTrust } from "@/components/landing/landing-trust";
 import { LandingContact } from "@/components/landing/landing-contact";
 import { LandingFooter } from "@/components/landing/landing-footer";
+import { LandingHero } from "@/components/landing/landing-hero";
+import { LandingNavbar } from "@/components/landing/landing-navbar";
+import { LandingServices } from "@/components/landing/landing-services";
+import { LandingTrust } from "@/components/landing/landing-trust";
 
-export default function HomePage() {
+type Props = {
+  params: Promise<{ locale: string }>;
+};
+
+export default async function Home({ params }: Props) {
+  await params;
   return (
-    <>
+    <main className="min-h-screen w-full">
       <LandingNavbar />
-      <main className="flex-1">
-        <LandingHero />
-        <LandingServices />
-        <LandingAbout />
-        <LandingTrust />
-        <LandingContact />
-      </main>
+      <LandingHero />
+      <LandingServices />
+      <LandingAbout />
+      <LandingTrust />
+      <LandingContact />
       <LandingFooter />
-    </>
+    </main>
   );
 }

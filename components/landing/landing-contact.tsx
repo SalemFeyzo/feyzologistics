@@ -74,6 +74,10 @@ export async function LandingContact() {
             {t("title")}
           </h2>
           <p className="mt-4 max-w-2xl text-muted-foreground">{t("body")}</p>
+          <address className="mt-6 max-w-2xl not-italic text-sm text-muted-foreground">
+            <span className="font-medium text-foreground">{t("addressLabel")}</span>
+            <span className="mt-1 block">{t("address")}</span>
+          </address>
           <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:flex-wrap">
             <Button asChild size="lg" className="rounded-full px-8">
               <a href={mailHref}>{t("cta")}</a>

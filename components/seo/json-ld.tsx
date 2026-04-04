@@ -19,6 +19,13 @@ export async function JsonLd({ locale }: JsonLdProps) {
     logo: logoUrl,
     description: t("description"),
     sameAs: getSocialProfileUrls(),
+    address: {
+      "@type": "PostalAddress",
+      streetAddress: t("address.streetAddress"),
+      addressLocality: t("address.addressLocality"),
+      addressRegion: t("address.addressRegion"),
+      addressCountry: t("address.addressCountry"),
+    },
   };
 
   const website = {

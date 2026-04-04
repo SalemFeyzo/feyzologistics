@@ -23,6 +23,7 @@ export async function LandingFooter() {
             style={{ width: "auto", height: "auto" }}
           />
           <p className="text-sm text-muted-foreground">{t("tagline")}</p>
+          <p className="max-w-sm text-sm text-muted-foreground">{t("address")}</p>
           <SocialMediaLinks />
         </div>
         <nav

@@ -3,7 +3,13 @@
     "title": "Feyzo Logistics",
     "description": "Reliable freight, warehousing, and supply chain solutions tailored to your business.",
     "ogTitle": "Feyzo Logistics",
-    "ogDescription": "Move goods with confidence. End-to-end logistics built for clarity and speed."
+    "ogDescription": "Move goods with confidence. End-to-end logistics built for clarity and speed.",
+    "address": {
+      "streetAddress": "The Goldsmiths' Market",
+      "addressLocality": "Latakia",
+      "addressRegion": "Latakia Governorate",
+      "addressCountry": "SY"
+    }
   },
   "Navbar": {
     "services": "Services",
@@ -52,6 +58,8 @@
   "Contact": {
     "title": "Ready to ship?",
     "body": "Tell us about your lanes, volumes, and deadlines. We will respond with a clear next step.",
+    "addressLabel": "Address",
+    "address": "Latakia Governorate, The Goldsmiths' Market, Syria",
     "cta": "Email us",
     "whatsappCta": "WhatsApp",
     "whatsappHint": "Message us on WhatsApp",
@@ -60,13 +68,23 @@
   "Trust": {
     "title": "Why teams choose us",
     "items": [
-      { "value": "24/7", "label": "Operations coverage" },
-      { "value": "40+", "label": "Corridors served" },
-      { "value": "99.2%", "label": "On-time target" }
+      {
+        "value": "24/7",
+        "label": "Operations coverage"
+      },
+      {
+        "value": "40+",
+        "label": "Corridors served"
+      },
+      {
+        "value": "99.2%",
+        "label": "On-time target"
+      }
     ]
   },
   "Footer": {
     "tagline": "Feyzo Logistics — moving business forward.",
+    "address": "Latakia Governorate, The Goldsmiths' Market, Syria",
     "companyName": "Feyzo Logistics",
     "rights": "All rights reserved.",
     "navServices": "Services",
