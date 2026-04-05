@@ -64,7 +64,9 @@
     "cta": "راسلنا بالبريد",
     "whatsappCta": "واتساب",
     "whatsappHint": "راسلنا عبر واتساب",
-    "phoneHint": "اتصل بنا"
+    "phoneHint": "اتصل بنا",
+    "mapTitle": "موقعنا",
+    "mapIframeTitle": "موقع فيزو للخدمات اللوجستية على خرائط Google"
   },
   "Trust": {
     "title": "لماذا  نحن",

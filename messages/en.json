@@ -64,7 +64,9 @@
     "cta": "Email us",
     "whatsappCta": "WhatsApp",
     "whatsappHint": "Message us on WhatsApp",
-    "phoneHint": "Call us"
+    "phoneHint": "Call us",
+    "mapTitle": "Find us",
+    "mapIframeTitle": "Feyzo Logistics location on Google Maps"
   },
   "Trust": {
     "title": "Why teams choose us",

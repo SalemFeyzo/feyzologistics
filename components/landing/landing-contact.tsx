@@ -4,6 +4,7 @@ import {
   getContactEmail,
   getPhoneDigits,
 } from "@/lib/contact-details";
+import { GOOGLE_MAPS_EMBED_SRC } from "@/lib/google-maps-embed";
 
 function formatPhoneDisplay(digits: string): string {
   if (digits.startsWith("963") && digits.length === 12) {
@@ -64,53 +65,75 @@ export async function LandingContact() {
     >
       <div className="container mx-auto max-w-6xl">
         <div className="rounded-3xl border border-border bg-muted/20 px-8 py-12 md:px-14 md:py-16">
-          <h2
-            id="contact-heading"
-            className="text-3xl font-semibold tracking-tight text-foreground md:text-4xl"
-          >
-            {t("title")}
-          </h2>
-          <p className="mt-4 max-w-2xl text-muted-foreground">{t("body")}</p>
-          <address className="mt-6 max-w-2xl not-italic text-sm text-muted-foreground">
-            <span className="font-medium text-foreground">{t("addressLabel")}</span>
-            <span className="mt-1 block">{t("address")}</span>
-          </address>
-          <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:flex-wrap">
-            <Button asChild size="lg" className="rounded-full px-8">
-              <a href={mailHref}>{t("cta")}</a>
-            </Button>
-            <Button
-              asChild
-              variant="outline"
-              size="lg"
-              className="rounded-full border-foreground/20 bg-transparent px-8"
-            >
-              <a
-                href={telHref}
-                className="inline-flex items-center gap-2 font-medium tabular-nums"
-                aria-label={`${t("phoneHint")}: ${phoneDisplay}`}
+          <div className="grid gap-10 lg:grid-cols-2 lg:items-start lg:gap-12">
+            <div className="min-w-0">
+              <h2
+                id="contact-heading"
+                className="text-3xl font-semibold tracking-tight text-foreground md:text-4xl"
               >
-                <PhoneIcon className="size-5 shrink-0" />
-                <span dir="ltr">{phoneDisplay}</span>
-              </a>
-            </Button>
-            <Button
-              asChild
-              variant="outline"
-              size="lg"
-              className="rounded-full border-foreground/20 bg-transparent px-8"
-            >
-              <a
-                href={whatsappHref}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center gap-2"
-                aria-label={`${t("whatsappHint")} (${whatsappDisplay})`}
-              >
-                <WhatsAppIcon className="size-5 shrink-0" />
-                {t("whatsappCta")}
-              </a>
-            </Button>
+                {t("title")}
+              </h2>
+              <p className="mt-4 max-w-2xl text-muted-foreground">{t("body")}</p>
+              <address className="mt-6 max-w-2xl not-italic text-sm text-muted-foreground">
+                <span className="font-medium text-foreground">
+                  {t("addressLabel")}
+                </span>
+                <span className="mt-1 block">{t("address")}</span>
+              </address>
+              <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:flex-wrap">
+                <Button asChild size="lg" className="rounded-full px-8">
+                  <a href={mailHref}>{t("cta")}</a>
+                </Button>
+                <Button
+                  asChild
+                  variant="outline"
+                  size="lg"
+                  className="rounded-full border-foreground/20 bg-transparent px-8"
+                >
+                  <a
+                    href={telHref}
+                    className="inline-flex items-center gap-2 font-medium tabular-nums"
+                    aria-label={`${t("phoneHint")}: ${phoneDisplay}`}
+                  >
+                    <PhoneIcon className="size-5 shrink-0" />
+                    <span dir="ltr">{phoneDisplay}</span>
+                  </a>
+                </Button>
+                <Button
+                  asChild
+                  variant="outline"
+                  size="lg"
+                  className="rounded-full border-foreground/20 bg-transparent px-8"
+                >
+                  <a
+                    href={whatsappHref}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-2"
+                    aria-label={`${t("whatsappHint")} (${whatsappDisplay})`}
+                  >
+                    <WhatsAppIcon className="size-5 shrink-0" />
+                    {t("whatsappCta")}
+                  </a>
+                </Button>
+              </div>
+            </div>
+
+            <div className="min-w-0 lg:pt-1">
+              <h3 className="mb-3 text-sm font-semibold tracking-tight text-foreground">
+                {t("mapTitle")}
+              </h3>
+              <div className="relative aspect-[4/3] w-full overflow-hidden rounded-2xl border border-border bg-muted/50 shadow-sm ring-1 ring-black/5 dark:bg-muted/25 dark:ring-white/10">
+                <iframe
+                  src={GOOGLE_MAPS_EMBED_SRC}
+                  title={t("mapIframeTitle")}
+                  className="absolute inset-0 h-full w-full border-0 dark:brightness-[0.92] dark:contrast-[1.05]"
+                  loading="lazy"
+                  referrerPolicy="no-referrer-when-downgrade"
+                  allowFullScreen
+                />
+              </div>
+            </div>
           </div>
         </div>
       </div>
