@@ -2,6 +2,10 @@ import type { MetadataRoute } from "next";
 import { routing } from "@/i18n/routing";
 import { getBaseUrl } from "@/lib/site";
 
+/**
+ * Multilingual URLs + alternates for hreflang (e.g. https://feyzologistics.com/en,
+ * https://feyzologistics.com/ar). Uses NEXT_PUBLIC_SITE_URL or https://feyzologistics.com.
+ */
 export default function sitemap(): MetadataRoute.Sitemap {
   const baseUrl = getBaseUrl();
   const defaultUrl = `${baseUrl}/${routing.defaultLocale}`;

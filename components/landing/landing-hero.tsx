@@ -13,7 +13,7 @@ export async function LandingHero() {
     >
       <Image
         src="/background.png"
-        alt=""
+        alt={t("heroImageAlt")}
         fill
         priority
         className="object-cover object-center"

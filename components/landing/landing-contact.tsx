@@ -1,9 +1,9 @@
 import { getTranslations } from "next-intl/server";
 import { Button } from "@/components/ui/button";
-
-const DEFAULT_CONTACT_EMAIL = "info@feyzologistics.com";
-/** E.164 without + for https://wa.me/ */
-const DEFAULT_WHATSAPP_DIGITS = "963967822812";
+import {
+  getContactEmail,
+  getPhoneDigits,
+} from "@/lib/contact-details";
 
 function formatPhoneDisplay(digits: string): string {
   if (digits.startsWith("963") && digits.length === 12) {
@@ -44,18 +44,15 @@ function WhatsAppIcon({ className }: { className?: string }) {
 
 export async function LandingContact() {
   const t = await getTranslations("Contact");
-  const email = process.env.NEXT_PUBLIC_CONTACT_EMAIL ?? DEFAULT_CONTACT_EMAIL;
+  const email = getContactEmail();
   const mailHref = `mailto:${email}`;
 
-  const phoneDigits =
-    process.env.NEXT_PUBLIC_PHONE_NUMBER?.replace(/\D/g, "") ||
-    process.env.NEXT_PUBLIC_WHATSAPP_NUMBER?.replace(/\D/g, "") ||
-    DEFAULT_WHATSAPP_DIGITS;
+  const phoneDigits = getPhoneDigits();
   const phoneDisplay = formatPhoneDisplay(phoneDigits);
   const telHref = `tel:+${phoneDigits}`;
   const whatsappDigits =
     process.env.NEXT_PUBLIC_WHATSAPP_NUMBER?.replace(/\D/g, "") ||
-    DEFAULT_WHATSAPP_DIGITS;
+    phoneDigits;
   const whatsappDisplay = formatPhoneDisplay(whatsappDigits);
   const whatsappHref = `https://wa.me/${whatsappDigits}`;
 

@@ -2,11 +2,7 @@ import type { Metadata } from "next";
 import { Geist, Tajawal } from "next/font/google";
 import { notFound } from "next/navigation";
 import { NextIntlClientProvider } from "next-intl";
-import {
-  getMessages,
-  getTranslations,
-  setRequestLocale,
-} from "next-intl/server";
+import { getMessages, setRequestLocale } from "next-intl/server";
 import { JsonLd } from "@/components/seo/json-ld";
 import { ThemeProvider } from "@/components/theme-provider";
 import { routing } from "@/i18n/routing";
@@ -14,12 +10,19 @@ import { getBaseUrl } from "@/lib/site";
 import { cn } from "@/lib/utils";
 import "../globals.css";
 
-const geist = Geist({ subsets: ["latin"], variable: "--font-sans" });
+const geist = Geist({
+  subsets: ["latin"],
+  variable: "--font-sans",
+  display: "swap",
+  adjustFontFallback: true,
+});
 
 const tajawal = Tajawal({
   variable: "--font-tajawal",
   subsets: ["arabic", "latin"],
   weight: ["400", "500", "700"],
+  display: "swap",
+  adjustFontFallback: true,
 });
 
 export function generateStaticParams() {
@@ -31,15 +34,11 @@ export async function generateMetadata({
 }: {
   params: Promise<{ locale: string }>;
 }): Promise<Metadata> {
-  const { locale } = await params;
-  const t = await getTranslations({ locale, namespace: "Metadata" });
+  await params;
   const baseUrl = getBaseUrl();
-  const pageUrl = `${baseUrl}/${locale}`;
 
   return {
     metadataBase: new URL(baseUrl),
-    title: t("title"),
-    description: t("description"),
     robots: {
       index: true,
       follow: true,
@@ -59,28 +58,6 @@ export async function generateMetadata({
           media: "(prefers-color-scheme: dark)",
         },
       ],
-    },
-    openGraph: {
-      title: t("ogTitle"),
-      description: t("ogDescription"),
-      locale: locale === "ar" ? "ar_SA" : "en_US",
-      alternateLocale: locale === "en" ? ["ar_SA"] : ["en_US"],
-      type: "website",
-      url: pageUrl,
-      siteName: t("ogTitle"),
-    },
-    twitter: {
-      card: "summary_large_image",
-      title: t("ogTitle"),
-      description: t("ogDescription"),
-    },
-    alternates: {
-      canonical: `/${locale}`,
-      languages: {
-        "x-default": `/${routing.defaultLocale}`,
-        en: "/en",
-        ar: "/ar",
-      },
     },
   };
 }

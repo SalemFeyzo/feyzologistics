@@ -14,7 +14,7 @@ export default async function Image({
   const { locale } = await params;
   const tMeta = await getTranslations({ locale, namespace: "Metadata" });
   const tHero = await getTranslations({ locale, namespace: "Hero" });
-  const brand = tMeta("ogTitle");
+  const brand = tMeta("siteName");
   const headlineLines = tHero("headline").split("\n").filter(Boolean);
   const isRtl = locale === "ar";
   const description = tMeta("description");

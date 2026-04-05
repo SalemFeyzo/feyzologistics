@@ -16,7 +16,7 @@ export async function LandingFooter() {
         <div className="flex flex-col gap-4">
           <Image
             src={bottomLogo}
-            alt=""
+            alt={t("bottomLogoAlt")}
             width={240}
             height={64}
             className="max-h-11 w-auto max-w-none object-contain opacity-90 sm:max-h-12 md:max-h-14 dark:invert"

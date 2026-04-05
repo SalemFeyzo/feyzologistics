@@ -1,9 +1,9 @@
 {
   "Metadata": {
-    "title": "Feyzo Logistics",
-    "description": "Reliable freight, warehousing, and supply chain solutions tailored to your business.",
-    "ogTitle": "Feyzo Logistics",
-    "ogDescription": "Move goods with confidence. End-to-end logistics built for clarity and speed.",
+    "siteName": "Feyzo Logistics",
+    "title": "Feyzo Logistics | Freight Forwarding & Customs Clearance",
+    "description": "Feyzo Logistics offers international logistics, freight forwarding, and customs clearance—with a focus on shipping to Syria and coordination through Lattakia port. Reliable cross-border cargo, transparent communication, and end-to-end supply chain support.",
+    "ogDescription": "Feyzo Logistics offers international logistics, freight forwarding, and customs clearance—with a focus on shipping to Syria and coordination through Lattakia port. Reliable cross-border cargo and supply chain support.",
     "address": {
       "streetAddress": "The Goldsmiths' Market",
       "addressLocality": "Latakia",
@@ -21,10 +21,11 @@
     "themeDark": "Use dark theme",
     "localeEn": "English",
     "localeAr": "العربية",
-    "logoAlt": "Feyzo Logistics"
+    "logoAlt": "Feyzo Logistics company logo"
   },
   "Hero": {
     "headline": "Streamlined Logistics\nDelivered with Excellence",
+    "heroImageAlt": "Logistics and freight operations — Feyzo Logistics",
     "subheadline": "Your trusted partner for reliable, efficient, and cost-effective logistics solutions. We connect your business to the world with precision and care.",
     "primaryCta": "Talk to us",
     "secondaryCta": "Our services"
@@ -84,6 +85,7 @@
   },
   "Footer": {
     "tagline": "Feyzo Logistics — moving business forward.",
+    "bottomLogoAlt": "Feyzo Logistics footer wordmark",
     "address": "Latakia Governorate, The Goldsmiths' Market, Syria",
     "companyName": "Feyzo Logistics",
     "rights": "All rights reserved.",
