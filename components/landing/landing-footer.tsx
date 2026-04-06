@@ -41,7 +41,10 @@ export async function LandingFooter() {
           </Link>
         </nav>
       </div>
-      <div className="container mx-auto mt-10 max-w-6xl border-t border-border pt-6">
+      <div className="container mx-auto mt-10 max-w-6xl space-y-4 border-t border-border pt-6">
+        <p className="mx-auto max-w-3xl text-center text-[11px] leading-relaxed text-muted-foreground/90">
+          {t("legalDisclaimer")}
+        </p>
         <p className="text-center text-xs text-muted-foreground">
           © {year} {t("companyName")}. {t("rights")}
         </p>

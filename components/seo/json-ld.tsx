@@ -3,7 +3,12 @@ import {
   getContactEmail,
   getTelephoneE164,
 } from "@/lib/contact-details";
-import { getBaseUrl, getSocialProfileUrls } from "@/lib/site";
+import {
+  FIATA_WEBSITE_URL,
+  getBaseUrl,
+  getSocialProfileUrls,
+  SIFFA_WEBSITE_URL,
+} from "@/lib/site";
 
 type JsonLdProps = {
   locale: string;
@@ -58,9 +63,10 @@ export async function JsonLd({ locale }: JsonLdProps) {
     "@type": "Organization",
     name:
       locale === "ar"
-        ? "الجمعية السورية للشحن الدولي والخدمات اللوجستية"
+        ? "الجمعية السورية للشحن والإمداد الوطني"
         : "Syrian International Freight Forwarding Association",
     alternateName: "SIFFA",
+    url: SIFFA_WEBSITE_URL,
   };
 
   const fiataOrganization = {
@@ -71,6 +77,7 @@ export async function JsonLd({ locale }: JsonLdProps) {
       locale === "ar"
         ? ["FIATA", "الاتحاد الدولي لجمعيات الشحن والخدمات اللوجستية"]
         : "FIATA",
+    url: FIATA_WEBSITE_URL,
   };
 
   const organizationAndLocalBusiness = {

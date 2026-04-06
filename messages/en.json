@@ -1,9 +1,9 @@
 {
   "Metadata": {
     "siteName": "Feyzo Logistics",
-    "title": "Feyzo Logistics | Freight Forwarding & Customs Clearance",
-    "description": "Feyzo Logistics offers international logistics, freight forwarding, and customs clearance—with a focus on shipping to Syria and coordination through Lattakia port. Reliable cross-border cargo, transparent communication, and end-to-end supply chain support.",
-    "ogDescription": "Feyzo Logistics offers international logistics, freight forwarding, and customs clearance—with a focus on shipping to Syria and coordination through Lattakia port. Reliable cross-border cargo and supply chain support.",
+    "title": "Feyzo Logistics | Freight Forwarding & Customs Clearance Management",
+    "description": "Feyzo Logistics is an international freight forwarder offering integrated logistics and customs clearance management—with a focus on shipping to Syria and coordination through Lattakia port. We manage the customs pathway through our network of licensed professional brokers while you retain a single point of contact. Reliable cross-border cargo, transparent communication, and end-to-end supply chain support.",
+    "ogDescription": "International freight forwarding and customs clearance management for Syria and Lattakia port. One partner coordinates licensed brokerage professionals for compliant, seamless cargo flow.",
     "address": {
       "streetAddress": "The Goldsmiths' Market",
       "addressLocality": "Latakia",
@@ -26,25 +26,25 @@
   "Hero": {
     "headline": "Streamlined Logistics\nDelivered with Excellence",
     "heroImageAlt": "Logistics and freight operations — Feyzo Logistics",
-    "subheadline": "Your trusted partner for reliable, efficient, and cost-effective logistics solutions. We connect your business to the world with precision and care.",
+    "subheadline": "International freight forwarding with an asset-light, partner-orchestrated model. As your single point of contact, we coordinate certified specialists worldwide—connecting your business with precision, clarity, and care.",
     "primaryCta": "Talk to us",
     "secondaryCta": "Our services"
   },
   "Services": {
     "title": "What we do",
-    "subtitle": "Core capabilities designed around reliability and transparency.",
+    "subtitle": "Core capabilities built on reliability, transparency, and coordinated execution. You work with one accountable partner; we manage and oversee licensed specialists across the chain.",
     "items": [
       {
-        "title": "Freight forwarding",
-        "description": "Air, ocean, and road options with clear milestones and proactive updates."
+        "title": "International freight forwarding",
+        "description": "We coordinate air, ocean, and road moves as your international freight forwarder—clear milestones, proactive updates, and accountable handoffs across our vetted carrier network."
       },
       {
         "title": "Warehousing",
         "description": "Secure storage, inventory visibility, and fulfillment aligned to your SLAs."
       },
       {
-        "title": "Customs & compliance",
-        "description": "Documentation and clearance support to reduce delays at borders."
+        "title": "Customs Clearance Management & Compliance",
+        "description": "We manage the entire customs process through our network of licensed professional brokers. As your single point of contact, we coordinate documentation, facilitate filings, consult on classification, and oversee clearance milestones—so your cargo keeps moving while authorized customs experts execute formalities in accordance with applicable regulations."
       },
       {
         "title": "Last-mile delivery",
@@ -54,7 +54,7 @@
   },
   "About": {
     "title": "About Feyzo",
-    "body": "We are an independent logistics partner focused on predictable handoffs, honest communication, and measurable delivery performance. Whether you ship regionally or across borders, we align our operations with your timelines and reporting needs."
+    "body": "Feyzo Logistics is an international freight forwarder and a member of the Syrian International Freight Forwarding Association (SIFFA). We act as your strategic logistics partner, coordinating with authorized customs experts to ensure seamless cargo flow. As your single point of contact, we oversee integrated forwarding, warehousing, and customs clearance management—predictable handoffs, candid communication, and measurable performance aligned with your timelines and reporting needs, wherever you ship regionally or across borders."
   },
   "Contact": {
     "title": "Ready to ship?",
@@ -90,7 +90,11 @@
     "memberLineSiffa": "Proud member of the Syrian International Freight Forwarding Association (SIFFA).",
     "memberLineFiata": "Affiliated with the International Federation of Freight Forwarders Associations (FIATA).",
     "siffaLogoAlt": "Syrian International Freight Forwarding Association (SIFFA) logo",
-    "fiataLogoAlt": "International Federation of Freight Forwarders Associations (FIATA) logo"
+    "fiataLogoAlt": "International Federation of Freight Forwarders Associations (FIATA) logo",
+    "siffaLinkAria": "Visit the Syrian International Freight Forwarding Association (SIFFA) website",
+    "fiataLinkAria": "Visit the FIATA website",
+    "siffaWebsiteLink": "siffa.org.sy",
+    "fiataWebsiteLink": "fiata.org"
   },
   "Footer": {
     "tagline": "Feyzo Logistics — moving business forward.",
@@ -107,6 +111,7 @@
       "facebook": "Feyzo on Facebook",
       "instagram": "Feyzo on Instagram",
       "threads": "Feyzo on Threads"
-    }
+    },
+    "legalDisclaimer": "Feyzo Logistics provides integrated logistics solutions. Customs clearance operations are executed via our network of licensed customs brokers in accordance with Syrian regulations."
   }
 }
