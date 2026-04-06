@@ -85,6 +85,13 @@
       }
     ]
   },
+  "Accreditations": {
+    "title": "Our Accreditations",
+    "memberLineSiffa": "Proud member of the Syrian International Freight Forwarding Association (SIFFA).",
+    "memberLineFiata": "Affiliated with the International Federation of Freight Forwarders Associations (FIATA).",
+    "siffaLogoAlt": "Syrian International Freight Forwarding Association (SIFFA) logo",
+    "fiataLogoAlt": "International Federation of Freight Forwarders Associations (FIATA) logo"
+  },
   "Footer": {
     "tagline": "Feyzo Logistics — moving business forward.",
     "bottomLogoAlt": "Feyzo Logistics footer wordmark",

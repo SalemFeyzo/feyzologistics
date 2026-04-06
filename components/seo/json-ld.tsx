@@ -28,6 +28,8 @@ export async function JsonLd({ locale }: JsonLdProps) {
   const logoUrl = `${baseUrl}${locale === "ar" ? "/logo-ar.svg" : "/logo-en.svg"}`;
   const businessId = `${baseUrl}/#business`;
   const websiteId = `${baseUrl}/#website`;
+  const siffaOrgId = `${baseUrl}/#organization-siffa`;
+  const fiataOrgId = `${baseUrl}/#organization-fiata`;
 
   /** Legal / display name: AR → فيزو للخدمات اللوجستية, EN → Feyzo Logistics */
   const businessName = t("siteName");
@@ -51,6 +53,26 @@ export async function JsonLd({ locale }: JsonLdProps) {
     },
   }));
 
+  const siffaOrganization = {
+    "@id": siffaOrgId,
+    "@type": "Organization",
+    name:
+      locale === "ar"
+        ? "الجمعية السورية للشحن الدولي والخدمات اللوجستية"
+        : "Syrian International Freight Forwarding Association",
+    alternateName: "SIFFA",
+  };
+
+  const fiataOrganization = {
+    "@id": fiataOrgId,
+    "@type": "Organization",
+    name: "International Federation of Freight Forwarders Associations",
+    alternateName:
+      locale === "ar"
+        ? ["FIATA", "الاتحاد الدولي لجمعيات الشحن والخدمات اللوجستية"]
+        : "FIATA",
+  };
+
   const organizationAndLocalBusiness = {
     "@id": businessId,
     "@type": ["Organization", "LocalBusiness"],
@@ -66,6 +88,7 @@ export async function JsonLd({ locale }: JsonLdProps) {
     email: getContactEmail(),
     address: postalAddress,
     sameAs: getSocialProfileUrls(),
+    memberOf: [{ "@id": siffaOrgId }, { "@id": fiataOrgId }],
     makesOffer,
     areaServed: [
       {
@@ -117,7 +140,13 @@ export async function JsonLd({ locale }: JsonLdProps) {
 
   const graph = {
     "@context": "https://schema.org",
-    "@graph": [organizationAndLocalBusiness, website, webPage],
+    "@graph": [
+      siffaOrganization,
+      fiataOrganization,
+      organizationAndLocalBusiness,
+      website,
+      webPage,
+    ],
   };
 
   return (

@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { getTranslations } from "next-intl/server";
+import { LandingAccreditations } from "@/components/landing/landing-accreditations";
 import { LandingAbout } from "@/components/landing/landing-about";
 import { LandingContact } from "@/components/landing/landing-contact";
 import { LandingFooter } from "@/components/landing/landing-footer";
@@ -57,6 +58,7 @@ export default async function Home({ params }: Props) {
       <LandingServices />
       <LandingAbout />
       <LandingTrust />
+      <LandingAccreditations />
       <LandingContact />
       <LandingFooter />
     </main>
