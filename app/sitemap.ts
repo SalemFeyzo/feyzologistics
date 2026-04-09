@@ -1,6 +1,7 @@
 import type { MetadataRoute } from "next";
 import { routing } from "@/i18n/routing";
 import { getBaseUrl } from "@/lib/site";
+import { getIndexedPageUrls } from "@/lib/sitemap-urls";
 
 /**
  * Multilingual URLs + alternates for hreflang (e.g. https://feyzologistics.com/en,
@@ -8,6 +9,7 @@ import { getBaseUrl } from "@/lib/site";
  */
 export default function sitemap(): MetadataRoute.Sitemap {
   const baseUrl = getBaseUrl();
+  const pageUrls = getIndexedPageUrls();
   const defaultUrl = `${baseUrl}/${routing.defaultLocale}`;
 
   const languageAlternates: Record<string, string> = {
@@ -17,13 +19,16 @@ export default function sitemap(): MetadataRoute.Sitemap {
     ),
   };
 
-  return routing.locales.map((locale) => ({
-    url: `${baseUrl}/${locale}`,
-    lastModified: new Date(),
-    changeFrequency: "weekly" as const,
-    priority: locale === routing.defaultLocale ? 1 : 0.9,
-    alternates: {
-      languages: languageAlternates,
-    },
-  }));
+  return pageUrls.map((url) => {
+    const locale = url.replace(`${baseUrl}/`, "");
+    return {
+      url,
+      lastModified: new Date(),
+      changeFrequency: "weekly" as const,
+      priority: locale === routing.defaultLocale ? 1 : 0.9,
+      alternates: {
+        languages: languageAlternates,
+      },
+    };
+  });
 }
