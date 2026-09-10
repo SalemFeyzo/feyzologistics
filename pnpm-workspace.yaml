@@ -1,6 +1,8 @@
-ignoredBuiltDependencies:
-  - msw
-  - sharp
-  - unrs-resolver
-onlyBuiltDependencies:
-  - '@swc/core'
+allowBuilds:
+  '@parcel/watcher': true
+  '@swc/core': true
+  unrs-resolver: true
+minimumReleaseAgeExclude:
+  - react-dom@19.3.0
+  - react@19.3.0
+  - scheduler@0.28.0

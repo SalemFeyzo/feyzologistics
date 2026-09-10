@@ -22,7 +22,7 @@ export function LandingNavbar() {
 
   return (
     <header className="sticky top-0 z-50 w-full border-b border-border bg-background/90 backdrop-blur-md supports-backdrop-filter:bg-background/80">
-      <div className="container mx-auto flex min-h-[4.5rem] max-w-6xl items-center justify-between gap-4 px-4 py-2 md:min-h-[5.25rem] md:px-6">
+      <div className="container mx-auto flex min-h-18 max-w-6xl items-center justify-between gap-4 px-4 py-2 md:min-h-[5.25rem] md:px-6">
         <Link
           href="/"
           className="flex shrink-0 items-center gap-2"
@@ -39,10 +39,7 @@ export function LandingNavbar() {
           />
         </Link>
 
-        <nav
-          className="hidden items-center gap-8 md:flex"
-          aria-label="Primary"
-        >
+        <nav className="hidden items-center gap-8 md:flex" aria-label="Primary">
           <Link href="/#services" className={navLinkClass}>
             {t("services")}
           </Link>
@@ -86,11 +83,7 @@ export function LandingNavbar() {
 
           <ThemeToggle />
 
-          <Button
-            asChild
-            size="sm"
-            className="hidden md:inline-flex"
-          >
+          <Button asChild size="sm" className="hidden md:inline-flex">
             <Link href="/#contact">{t("cta")}</Link>
           </Button>
 

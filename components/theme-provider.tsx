@@ -9,18 +9,16 @@ type ThemeContextValue = {
   theme: ThemeName;
   setTheme: (theme: ThemeName) => void;
   resolvedTheme: "light" | "dark" | undefined;
+  systemTheme: "light" | "dark" | undefined;
 };
 
 const ThemeContext = React.createContext<ThemeContextValue | null>(null);
 
 function getSystemEffective(): "light" | "dark" {
+  if (typeof window === "undefined") return "light";
   return window.matchMedia("(prefers-color-scheme: dark)").matches
     ? "dark"
     : "light";
-}
-
-function resolveEffective(theme: ThemeName): "light" | "dark" {
-  return theme === "system" ? getSystemEffective() : theme;
 }
 
 function applyDom(effective: "light" | "dark") {
@@ -31,55 +29,76 @@ function applyDom(effective: "light" | "dark") {
 
 export function ThemeProvider({ children }: { children: React.ReactNode }) {
   const [theme, setThemeState] = React.useState<ThemeName>("system");
-  const [resolvedTheme, setResolvedTheme] = React.useState<
+  const [systemTheme, setSystemTheme] = React.useState<
     "light" | "dark" | undefined
   >(undefined);
   const [isHydrated, setIsHydrated] = React.useState(false);
 
+  // FIXED: Calculate resolvedTheme during render instead of inside an effect.
+  // This eliminates the cascading render entirely.
+  const resolvedTheme = isHydrated
+    ? theme === "system"
+      ? systemTheme
+      : theme
+    : undefined;
+
+  // 1. Initial Mount
   React.useEffect(() => {
     const stored = localStorage.getItem(THEME_STORAGE_KEY) as ThemeName | null;
     const initial: ThemeName =
       stored === "light" || stored === "dark" || stored === "system"
         ? stored
         : "system";
+
+    // In Next.js, syncing client-only state from localStorage on mount is required.
+    // We disable the linter here because this synchronous update prevents hydration mismatch.
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setThemeState(initial);
-    const effective = resolveEffective(initial);
-    setResolvedTheme(effective);
-    applyDom(effective);
+
+    setSystemTheme(getSystemEffective());
+
     setIsHydrated(true);
+
+    const effective = initial === "system" ? getSystemEffective() : initial;
+    applyDom(effective);
   }, []);
 
+  // 2. Handle theme changes (user interaction)
+  // FIXED: This effect now ONLY updates external systems (DOM & localStorage).
   React.useEffect(() => {
     if (!isHydrated) return;
-    const effective = resolveEffective(theme);
-    setResolvedTheme(effective);
+
+    const effective = theme === "system" ? systemTheme || "light" : theme;
     applyDom(effective);
+
     try {
       localStorage.setItem(THEME_STORAGE_KEY, theme);
     } catch {
       /* private mode */
     }
-  }, [theme, isHydrated]);
+  }, [theme, systemTheme, isHydrated]);
 
+  // 3. Listen for OS system preference changes
   React.useEffect(() => {
-    if (!isHydrated || theme !== "system") return;
+    if (!isHydrated) return;
+
     const mq = window.matchMedia("(prefers-color-scheme: dark)");
     const onChange = () => {
-      const effective = getSystemEffective();
-      setResolvedTheme(effective);
-      applyDom(effective);
+      // Setting state inside an event listener callback is completely allowed by the linter.
+      setSystemTheme(getSystemEffective());
     };
+
     mq.addEventListener("change", onChange);
     return () => mq.removeEventListener("change", onChange);
-  }, [theme, isHydrated]);
+  }, [isHydrated]);
 
   const setTheme = React.useCallback((next: ThemeName) => {
     setThemeState(next);
   }, []);
 
   const value = React.useMemo(
-    () => ({ theme, setTheme, resolvedTheme }),
-    [theme, setTheme, resolvedTheme],
+    () => ({ theme, setTheme, resolvedTheme, systemTheme }),
+    [theme, setTheme, resolvedTheme, systemTheme],
   );
 
   return (
@@ -87,7 +106,6 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
   );
 }
 
-/** Compatible with the subset of `next-themes` used in this app. */
 export function useTheme() {
   const ctx = React.useContext(ThemeContext);
   if (!ctx) {
@@ -96,14 +114,9 @@ export function useTheme() {
 
   return {
     theme: ctx.theme,
-    setTheme: (name: string) => {
-      if (name === "light" || name === "dark" || name === "system") {
-        ctx.setTheme(name);
-      }
-    },
+    setTheme: ctx.setTheme, // Now safe to pass directly
     resolvedTheme: ctx.resolvedTheme,
     themes: ["light", "dark", "system"] as const,
-    systemTheme:
-      typeof window === "undefined" ? undefined : getSystemEffective(),
+    systemTheme: ctx.systemTheme,
   };
 }
