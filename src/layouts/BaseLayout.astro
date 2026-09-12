@@ -1,0 +1,95 @@
+---
+import "@fontsource-variable/geist";
+import "@fontsource/tajawal/400.css";
+import "@fontsource/tajawal/500.css";
+import "@fontsource/tajawal/700.css";
+import "@/styles/global.css";
+import JsonLd from "@/components/seo/JsonLd.astro";
+import { defaultLocale, locales, useTranslations, type AppLocale } from "@/i18n";
+import { getBaseUrl } from "@/lib/site";
+import { THEME_INIT_SCRIPT } from "@/lib/theme-inline-script";
+
+interface Props {
+  locale: AppLocale;
+  title: string;
+  description: string;
+  ogDescription?: string;
+  siteName?: string;
+  /** Relative path within a locale ("" = home). */
+  path?: string;
+}
+
+const {
+  locale,
+  title,
+  description,
+  ogDescription = description,
+  siteName,
+  path = "",
+} = Astro.props;
+
+const t = useTranslations(locale, "Metadata");
+const resolvedSiteName = siteName ?? t("siteName");
+const baseUrl = getBaseUrl();
+const isRtl = locale === "ar";
+const dir = isRtl ? "rtl" : "ltr";
+
+const cleanPath = path.replace(/\/+$/, "").replace(/^\//, "");
+const suffix = cleanPath ? `/${cleanPath}` : "";
+const canonical = `${baseUrl}/${locale}${suffix}`;
+const defaultHref = `${baseUrl}/${defaultLocale}${suffix}`;
+
+const ogLocale = isRtl ? "ar_SA" : "en_US";
+const alternateLocale = isRtl ? "en_US" : "ar_SA";
+
+const gaId = import.meta.env.PUBLIC_GA_MEASUREMENT_ID;
+const gtagInline = gaId
+  ? `window.dataLayer = window.dataLayer || []; function gtag(){dataLayer.push(arguments);} gtag('js', new Date()); gtag('config', '${gaId}');`
+  : "";
+---
+
+<!doctype html>
+<html lang={locale} dir={dir} class="h-full">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="generator" content={Astro.generator} />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+
+    <link rel="icon" href="/favicon-light.ico" media="(prefers-color-scheme: light)" />
+    <link rel="icon" href="/favicon-dark.ico" media="(prefers-color-scheme: dark)" />
+
+    <link rel="canonical" href={canonical} />
+    <link rel="alternate" hreflang="x-default" href={defaultHref} />
+    {locales.map((loc) => (
+      <link rel="alternate" hreflang={loc} href={`${baseUrl}/${loc}${suffix}`} />
+    ))}
+
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content={resolvedSiteName} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={ogDescription} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:locale" content={ogLocale} />
+    <meta property="og:locale:alternate" content={alternateLocale} />
+
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={ogDescription} />
+
+    <script is:inline set:html={THEME_INIT_SCRIPT}></script>
+
+    <JsonLd locale={locale} />
+
+    {gaId ? (
+      <>
+        <script async src={`https://www.googletagmanager.com/gtag/js?id=${gaId}`}></script>
+        <script is:inline set:html={gtagInline}></script>
+      </>
+    ) : null}
+  </head>
+  <body class={`min-h-full flex flex-col bg-background text-foreground antialiased ${isRtl ? "font-tajawal" : "font-sans"}`}>
+    <slot />
+  </body>
+</html>
