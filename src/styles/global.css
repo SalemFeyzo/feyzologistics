@@ -1,4 +1,8 @@
 @import "tailwindcss";
+@import "@fontsource-variable/geist";
+@import "@fontsource/tajawal/400.css";
+@import "@fontsource/tajawal/500.css";
+@import "@fontsource/tajawal/700.css";
 
 @custom-variant dark (&:is(.dark *));
 
@@ -122,10 +126,19 @@
   * {
     @apply border-border outline-ring/50;
   }
-  body {
-    @apply bg-background text-foreground;
-  }
+
   html {
     @apply font-sans;
+    text-rendering: optimizeLegibility;
+    font-synthesis: none;
+  }
+
+  /* Arabic (rtl) uses the Tajawal typeface; English (ltr) keeps Geist (font-sans). */
+  html[dir="rtl"] {
+    @apply font-tajawal;
+  }
+
+  body {
+    @apply bg-background text-foreground;
   }
 }

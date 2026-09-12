@@ -1,8 +1,4 @@
 ---
-import "@fontsource-variable/geist";
-import "@fontsource/tajawal/400.css";
-import "@fontsource/tajawal/500.css";
-import "@fontsource/tajawal/700.css";
 import "@/styles/global.css";
 import JsonLd from "@/components/seo/JsonLd.astro";
 import { defaultLocale, locales, useTranslations, type AppLocale } from "@/i18n";
@@ -89,7 +85,7 @@ const gtagInline = gaId
       </>
     ) : null}
   </head>
-  <body class={`min-h-full flex flex-col bg-background text-foreground antialiased ${isRtl ? "font-tajawal" : "font-sans"}`}>
+  <body class="min-h-full flex flex-col bg-background text-foreground antialiased">
     <slot />
   </body>
 </html>
