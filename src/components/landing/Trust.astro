@@ -1,0 +1,35 @@
+---
+import { useTranslations, type AppLocale } from "@/i18n";
+
+interface Props {
+  locale: AppLocale;
+}
+
+const { locale } = Astro.props;
+const t = useTranslations(locale, "Trust");
+const items = t.raw("items") as { value: string; label: string }[];
+---
+
+<section
+  class="border-b border-border bg-muted/30 px-4 py-16 md:py-20"
+  aria-labelledby="trust-heading"
+>
+  <div class="container mx-auto max-w-6xl">
+    <h2
+      id="trust-heading"
+      class="text-center text-2xl font-semibold tracking-tight text-foreground md:text-3xl"
+    >
+      {t("title")}
+    </h2>
+    <ul class="mt-12 grid gap-8 sm:grid-cols-3">
+      {items.map((item) => (
+        <li class="flex flex-col items-center text-center">
+          <span class="text-4xl font-semibold tabular-nums text-foreground md:text-5xl">
+            {item.value}
+          </span>
+          <span class="mt-2 text-sm text-muted-foreground">{item.label}</span>
+        </li>
+      ))}
+    </ul>
+  </div>
+</section>

@@ -1,0 +1,50 @@
+---
+import Button from "@/components/ui/Button.astro";
+import { useTranslations, type AppLocale } from "@/i18n";
+
+interface Props {
+  locale: AppLocale;
+}
+
+const { locale } = Astro.props;
+const t = useTranslations(locale, "Hero");
+---
+
+<section
+  class="relative overflow-hidden border-b border-border px-4 py-20 md:py-28"
+  aria-labelledby="hero-heading"
+>
+  <img
+    src="/background.png"
+    alt={t("heroImageAlt")}
+    class="absolute inset-0 h-full w-full object-cover object-center"
+  />
+  <div
+    class="pointer-events-none absolute inset-0 bg-background/65 dark:bg-background/70"
+    aria-hidden="true"
+  />
+  <div class="container relative z-10 mx-auto max-w-6xl">
+    <h1
+      id="hero-heading"
+      class="max-w-3xl whitespace-pre-line text-4xl font-semibold leading-snug tracking-tight text-foreground md:text-5xl lg:text-6xl"
+    >
+      {t("headline")}
+    </h1>
+    <p class="mt-6 max-w-2xl text-lg text-foreground/90 md:text-xl dark:text-muted-foreground">
+      {t("subheadline")}
+    </p>
+    <div class="mt-10 flex flex-wrap gap-3">
+      <Button href="#contact" size="lg" class="rounded-full px-8">
+        {t("primaryCta")}
+      </Button>
+      <Button
+        href="#services"
+        variant="outline"
+        size="lg"
+        class="rounded-full border-foreground/20 bg-transparent px-8"
+      >
+        {t("secondaryCta")}
+      </Button>
+    </div>
+  </div>
+</section>

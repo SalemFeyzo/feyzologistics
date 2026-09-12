@@ -1,0 +1,140 @@
+---
+import Button from "@/components/ui/Button.astro";
+import { ThemeToggle } from "@/components/theme-toggle";
+import { useTranslations, type AppLocale } from "@/i18n";
+
+interface Props {
+  locale: AppLocale;
+}
+
+const { locale } = Astro.props;
+const t = useTranslations(locale, "Navbar");
+const logoSrc = locale === "ar" ? "/logo-ar.svg" : "/logo-en.svg";
+const navLinkClass =
+  "text-sm font-medium text-foreground/80 transition-colors hover:text-foreground";
+---
+
+<header class="sticky top-0 z-50 w-full border-b border-border bg-background/90 backdrop-blur-md supports-backdrop-filter:bg-background/80">
+  <div class="container mx-auto flex min-h-18 max-w-6xl items-center justify-between gap-4 px-4 py-2 md:min-h-21 md:px-6">
+    <a href={`/${locale}`} class="flex shrink-0 items-center gap-2">
+      <img
+        src={logoSrc}
+        alt={t("logoAlt")}
+        class="max-h-12 w-auto max-w-none object-contain sm:max-h-14 md:max-h-16 dark:invert"
+      />
+    </a>
+
+    <nav class="hidden items-center gap-8 md:flex" aria-label="Primary">
+      <a href="#services" class={navLinkClass}>{t("services")}</a>
+      <a href="#about" class={navLinkClass}>{t("about")}</a>
+      <a href="#contact" class={navLinkClass}>{t("contact")}</a>
+    </nav>
+
+    <div class="flex items-center gap-1 md:gap-2">
+      <div class="flex items-center rounded-full border border-border px-0.5 text-xs font-medium">
+        <a
+          href="/en"
+          class:list={[
+            "rounded-full px-2 py-1 transition-colors",
+            locale === "en"
+              ? "bg-foreground text-background"
+              : "text-muted-foreground hover:text-foreground",
+          ]}
+          aria-current={locale === "en" ? "page" : undefined}
+        >
+          EN
+        </a>
+        <a
+          href="/ar"
+          class:list={[
+            "rounded-full px-2 py-1 transition-colors",
+            locale === "ar"
+              ? "bg-foreground text-background"
+              : "text-muted-foreground hover:text-foreground",
+          ]}
+          aria-current={locale === "ar" ? "page" : undefined}
+        >
+          AR
+        </a>
+      </div>
+
+      <ThemeToggle locale={locale} client:load />
+
+      <Button href="#contact" size="sm" class="hidden md:inline-flex">
+        {t("cta")}
+      </Button>
+
+      <button
+        id="nav-toggle"
+        type="button"
+        class="inline-flex size-9 shrink-0 items-center justify-center rounded-4xl border border-transparent text-sm font-medium text-foreground transition-all hover:bg-muted hover:text-foreground md:hidden"
+        aria-expanded="false"
+        aria-controls="mobile-nav"
+        aria-label={t("toggleMenu")}
+      >
+        <svg
+          id="nav-open-icon"
+          class="size-5"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          aria-hidden="true"
+        >
+          <path d="M4 6h16M4 12h16M4 18h16" />
+        </svg>
+        <svg
+          id="nav-close-icon"
+          class="hidden size-5"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          aria-hidden="true"
+        >
+          <path d="M18 6 6 18M6 6l12 12" />
+        </svg>
+      </button>
+    </div>
+  </div>
+
+  <div id="mobile-nav" class="hidden border-t border-border bg-background md:hidden">
+    <nav
+      class="container mx-auto flex max-w-6xl flex-col gap-1 px-4 py-4"
+      aria-label="Mobile primary"
+    >
+      <a href="#services" class="rounded-lg px-3 py-2 text-sm font-medium hover:bg-muted">
+        {t("services")}
+      </a>
+      <a href="#about" class="rounded-lg px-3 py-2 text-sm font-medium hover:bg-muted">
+        {t("about")}
+      </a>
+      <a href="#contact" class="rounded-lg px-3 py-2 text-sm font-medium hover:bg-muted">
+        {t("contact")}
+      </a>
+      <Button href="#contact" class="mt-2 w-full">
+        {t("cta")}
+      </Button>
+    </nav>
+  </div>
+
+  <script is:inline>
+    (function () {
+      var btn = document.getElementById("nav-toggle");
+      var menu = document.getElementById("mobile-nav");
+      var openIcon = document.getElementById("nav-open-icon");
+      var closeIcon = document.getElementById("nav-close-icon");
+      if (!btn || !menu || !openIcon || !closeIcon) return;
+      btn.addEventListener("click", function () {
+        var isOpen = btn.getAttribute("aria-expanded") === "true";
+        var next = !isOpen;
+        btn.setAttribute("aria-expanded", String(next));
+        menu.classList.toggle("hidden", !next);
+        openIcon.classList.toggle("hidden", next);
+        closeIcon.classList.toggle("hidden", !next);
+      });
+    })();
+  </script>
+</header>

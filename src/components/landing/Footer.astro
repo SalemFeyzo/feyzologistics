@@ -1,0 +1,44 @@
+---
+import SocialMediaLinks from "@/components/SocialMediaLinks.astro";
+import { useTranslations, type AppLocale } from "@/i18n";
+
+interface Props {
+  locale: AppLocale;
+}
+
+const { locale } = Astro.props;
+const t = useTranslations(locale, "Footer");
+const year = new Date().getFullYear();
+const bottomLogo = locale === "ar" ? "/logo-bottom-ar.svg" : "/logo-bottom-en.svg";
+---
+
+<footer class="border-t border-border bg-muted/20 px-4 py-12">
+  <div class="container mx-auto flex max-w-6xl flex-col gap-8 md:flex-row md:items-center md:justify-between">
+    <div class="flex flex-col gap-4">
+      <img
+        src={bottomLogo}
+        alt={t("bottomLogoAlt")}
+        class="max-h-11 w-auto max-w-none object-contain opacity-90 sm:max-h-12 md:max-h-14 dark:invert"
+      />
+      <p class="text-sm text-muted-foreground">{t("tagline")}</p>
+      <p class="max-w-sm text-sm text-muted-foreground">{t("address")}</p>
+      <SocialMediaLinks locale={locale} />
+    </div>
+    <nav
+      class="flex flex-wrap gap-6 text-sm font-medium text-muted-foreground"
+      aria-label="Footer"
+    >
+      <a href="#services" class="hover:text-foreground">{t("navServices")}</a>
+      <a href="#about" class="hover:text-foreground">{t("navAbout")}</a>
+      <a href="#contact" class="hover:text-foreground">{t("navContact")}</a>
+    </nav>
+  </div>
+  <div class="container mx-auto mt-10 max-w-6xl space-y-4 border-t border-border pt-6">
+    <p class="mx-auto max-w-3xl text-center text-[11px] leading-relaxed text-muted-foreground/90">
+      {t("legalDisclaimer")}
+    </p>
+    <p class="text-center text-xs text-muted-foreground">
+      © {year} {t("companyName")}. {t("rights")}
+    </p>
+  </div>
+</footer>

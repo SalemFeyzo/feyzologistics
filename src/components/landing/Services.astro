@@ -1,0 +1,37 @@
+---
+import { useTranslations, type AppLocale } from "@/i18n";
+
+interface Props {
+  locale: AppLocale;
+}
+
+const { locale } = Astro.props;
+const t = useTranslations(locale, "Services");
+const items = t.raw("items") as { title: string; description: string }[];
+---
+
+<section
+  id="services"
+  class="scroll-mt-20 border-b border-border bg-muted/30 px-4 py-20 md:py-24"
+  aria-labelledby="services-heading"
+>
+  <div class="container mx-auto max-w-6xl">
+    <h2
+      id="services-heading"
+      class="text-3xl font-semibold tracking-tight text-foreground md:text-4xl"
+    >
+      {t("title")}
+    </h2>
+    <p class="mt-3 max-w-2xl text-muted-foreground">{t("subtitle")}</p>
+    <ul class="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+      {items.map((item) => (
+        <li class="rounded-2xl border border-border bg-card p-6 text-card-foreground shadow-sm">
+          <h3 class="text-lg font-semibold">{item.title}</h3>
+          <p class="mt-2 text-sm leading-relaxed text-muted-foreground">
+            {item.description}
+          </p>
+        </li>
+      ))}
+    </ul>
+  </div>
+</section>

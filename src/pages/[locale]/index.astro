@@ -1,6 +1,13 @@
 ---
 import BaseLayout from "@/layouts/BaseLayout.astro";
-import LandingPage from "@/components/landing/LandingPage";
+import Navbar from "@/components/landing/Navbar.astro";
+import Hero from "@/components/landing/Hero.astro";
+import Services from "@/components/landing/Services.astro";
+import About from "@/components/landing/About.astro";
+import Trust from "@/components/landing/Trust.astro";
+import Accreditations from "@/components/landing/Accreditations.astro";
+import Contact from "@/components/landing/Contact.astro";
+import Footer from "@/components/landing/Footer.astro";
 import { locales, useTranslations, type AppLocale } from "@/i18n";
 
 export function getStaticPaths() {
@@ -17,5 +24,14 @@ const t = useTranslations(locale, "Metadata");
   description={t("description")}
   ogDescription={t("ogDescription")}
 >
-  <LandingPage locale={locale} client:load />
+  <main class="min-h-screen w-full">
+    <Navbar locale={locale} />
+    <Hero locale={locale} />
+    <Services locale={locale} />
+    <About locale={locale} />
+    <Trust locale={locale} />
+    <Accreditations locale={locale} />
+    <Contact locale={locale} />
+    <Footer locale={locale} />
+  </main>
 </BaseLayout>

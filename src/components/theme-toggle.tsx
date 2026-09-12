@@ -1,9 +1,8 @@
 "use client";
 
-import { useSyncExternalStore } from "react";
-import { useTheme } from "@/components/theme-provider";
-import { useTranslations } from "@/i18n/react";
-import { Button } from "@/components/ui/button";
+import { useEffect, useState, useSyncExternalStore } from "react";
+import { THEME_STORAGE_KEY } from "@/lib/theme-inline-script";
+import { useTranslations, type AppLocale } from "@/i18n";
 
 function useIsClient() {
   return useSyncExternalStore(
@@ -13,34 +12,46 @@ function useIsClient() {
   );
 }
 
-export function ThemeToggle() {
-  const t = useTranslations("Navbar");
-  const { resolvedTheme, setTheme } = useTheme();
+export function ThemeToggle({ locale }: { locale: AppLocale }) {
+  const t = useTranslations(locale, "Navbar");
   const isClient = useIsClient();
+  const [isDark, setIsDark] = useState(false);
+
+  // Sync with the blocking inline script that already applied `.dark` before paint.
+  useEffect(() => {
+    setIsDark(document.documentElement.classList.contains("dark"));
+  }, []);
 
   if (!isClient) {
     return <span className="inline-flex size-9 shrink-0" aria-hidden />;
   }
 
-  const isDark = resolvedTheme === "dark";
-  const nextTheme = isDark ? "light" : "dark";
+  const toggle = () => {
+    const next = isDark ? "light" : "dark";
+    setIsDark(next === "dark");
+    document.documentElement.classList.toggle("dark", next === "dark");
+    document.documentElement.style.colorScheme = next;
+    try {
+      localStorage.setItem(THEME_STORAGE_KEY, next);
+    } catch {
+      /* private mode */
+    }
+  };
 
   return (
-    <Button
+    <button
       type="button"
-      variant="ghost"
-      size="icon"
-      className="shrink-0 text-foreground"
-      onClick={() => setTheme(nextTheme)}
+      className="inline-flex size-9 shrink-0 items-center justify-center rounded-4xl border border-transparent text-sm font-medium text-foreground transition-all hover:bg-muted hover:text-foreground"
+      onClick={toggle}
       aria-label={isDark ? t("themeLight") : t("themeDark")}
       aria-pressed={isDark}
     >
       {isDark ? (
-        <SunIcon className="size-5" aria-hidden />
+        <SunIcon className="size-5" />
       ) : (
-        <MoonIcon className="size-5" aria-hidden />
+        <MoonIcon className="size-5" />
       )}
-    </Button>
+    </button>
   );
 }
 

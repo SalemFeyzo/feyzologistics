@@ -1,0 +1,28 @@
+---
+import { useTranslations, type AppLocale } from "@/i18n";
+
+interface Props {
+  locale: AppLocale;
+}
+
+const { locale } = Astro.props;
+const t = useTranslations(locale, "About");
+---
+
+<section
+  id="about"
+  class="scroll-mt-20 border-b border-border bg-background px-4 py-20 md:py-24"
+  aria-labelledby="about-heading"
+>
+  <div class="container mx-auto max-w-6xl">
+    <h2
+      id="about-heading"
+      class="text-3xl font-semibold tracking-tight text-foreground md:text-4xl"
+    >
+      {t("title")}
+    </h2>
+    <p class="mt-6 max-w-3xl text-lg leading-relaxed text-muted-foreground">
+      {t("body")}
+    </p>
+  </div>
+</section>
