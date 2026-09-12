@@ -1,5 +1,6 @@
 ---
 import BaseLayout from "@/layouts/BaseLayout.astro";
+import LandingPage from "@/components/landing/LandingPage";
 import { locales, useTranslations, type AppLocale } from "@/i18n";
 
 export function getStaticPaths() {
@@ -16,14 +17,5 @@ const t = useTranslations(locale, "Metadata");
   description={t("description")}
   ogDescription={t("ogDescription")}
 >
-  <main class="min-h-screen w-full">
-    <section class="mx-auto flex min-h-screen w-full max-w-3xl flex-col items-center justify-center gap-6 px-6 text-center">
-      <h1 class="text-4xl font-semibold tracking-tight text-foreground md:text-5xl">
-        {t("siteName")}
-      </h1>
-      <p class="max-w-xl text-lg leading-relaxed text-muted-foreground">
-        {t("description")}
-      </p>
-    </section>
-  </main>
+  <LandingPage locale={locale} client:load />
 </BaseLayout>
