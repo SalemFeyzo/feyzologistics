@@ -17,7 +17,7 @@ export default defineConfig({
   // Minify the HTML output (default, made explicit).
   compressHTML: true,
   i18n: {
-    defaultLocale: 'en',
+    defaultLocale: 'ar',
     locales: ['ar', 'en'],
     routing: {
       prefixDefaultLocale: true,
