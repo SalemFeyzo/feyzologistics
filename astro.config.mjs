@@ -12,6 +12,10 @@ const SITE = (
 // https://astro.build/config
 export default defineConfig({
   site: SITE,
+  // Consistent URLs + no duplicate `/ar` vs `/ar/` pages.
+  trailingSlash: 'never',
+  // Minify the HTML output (default, made explicit).
+  compressHTML: true,
   i18n: {
     defaultLocale: 'ar',
     locales: ['ar', 'en'],
