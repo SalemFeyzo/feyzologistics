@@ -5,14 +5,14 @@
  *
  * Required env:
  *   INDEXNOW_KEY — same as public/{INDEXNOW_KEY}.txt
- *   NEXT_PUBLIC_SITE_URL or SITE_URL — site origin (default https://feyzologistics.com)
+ *   PUBLIC_SITE_URL or SITE_URL — site origin (default https://feyzologistics.com)
  *
  * Optional:
- *   INDEXNOW_LOCALES — comma-separated (default en,ar; keep in sync with i18n/routing.ts)
+ *   INDEXNOW_LOCALES — comma-separated (default ar,en; keep in sync with src/i18n)
  */
 
 const baseUrl = (
-  process.env.NEXT_PUBLIC_SITE_URL ||
+  process.env.PUBLIC_SITE_URL ||
   process.env.SITE_URL ||
   "https://feyzologistics.com"
 ).replace(/\/$/, "");
@@ -24,7 +24,7 @@ if (!key) {
   process.exit(0);
 }
 
-const locales = (process.env.INDEXNOW_LOCALES || "en,ar")
+const locales = (process.env.INDEXNOW_LOCALES || "ar,en")
   .split(",")
   .map((s) => s.trim())
   .filter(Boolean);
