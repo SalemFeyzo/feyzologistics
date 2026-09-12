@@ -1,6 +1,5 @@
 // @ts-check
 import { defineConfig } from 'astro/config';
-import react from '@astrojs/react';
 import tailwindcss from '@tailwindcss/vite';
 
 import sitemap from '@astrojs/sitemap';
@@ -27,9 +26,9 @@ export default defineConfig({
       prefixDefaultLocale: true,
     },
   },
-  integrations: [react(), sitemap({
+  integrations: [sitemap({
     i18n: {
-      defaultLocale: 'en', // أو اللغّة الافتراضية لديك
+      defaultLocale: 'en',
       locales: {
         ar: 'ar',
         en: 'en',

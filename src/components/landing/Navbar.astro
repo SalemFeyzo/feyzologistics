@@ -1,6 +1,6 @@
 ---
 import Button from "@/components/ui/Button.astro";
-import { ThemeToggle } from "@/components/theme-toggle";
+import  ThemeToggle  from "@/components/ThemeToggle.astro";
 import { useTranslations, type AppLocale } from "@/i18n";
 import { PREFERRED_LOCALE_KEY } from "@/lib/locale-inline-script";
 
@@ -65,7 +65,7 @@ const storePreferenceScript = `(function(){var k=${JSON.stringify(
         </a>
       </div>
 
-      <ThemeToggle locale={locale} client:load />
+      <ThemeToggle locale={locale} />
 
       <Button href="#contact" size="sm" class="hidden md:inline-flex">
         {t("cta")}

@@ -1,0 +1,76 @@
+---
+import { useTranslations, type AppLocale } from "@/i18n";
+
+interface Props {
+  locale?: AppLocale;
+  class?: string;
+}
+
+const { locale = "ar", class: className = "" } = Astro.props;
+const t = useTranslations(locale, "Navbar");
+---
+
+<button
+  id="theme-toggle"
+  type="button"
+  class:list={[
+    "inline-flex size-9 shrink-0 items-center justify-center rounded-full border border-transparent text-sm font-medium text-foreground transition-all hover:bg-muted hover:text-foreground",
+    className,
+  ]}
+  aria-label={t("themeDark")}
+>
+  <!-- أيقونة الشمس (تظهر في المود الداكن فقط) -->
+  <svg
+    class="hidden size-5 dark:block"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    stroke-width="2"
+    stroke-linecap="round"
+    stroke-linejoin="round"
+  >
+    <circle cx="12" cy="12" r="4"></circle>
+    <path
+      d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"
+    ></path>
+  </svg>
+
+  <!-- أيقونة القمر (تظهر في المود الفاتح فقط) -->
+  <svg
+    class="block size-5 dark:hidden"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    stroke-width="2"
+    stroke-linecap="round"
+    stroke-linejoin="round"
+  >
+    <path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"></path>
+  </svg>
+</button>
+
+<script>
+  import { THEME_STORAGE_KEY } from "@/lib/theme-inline-script";
+
+  function initThemeToggle() {
+    const button = document.getElementById("theme-toggle");
+    if (!button) return;
+
+    button.addEventListener("click", () => {
+      const isDark = document.documentElement.classList.toggle("dark");
+      document.documentElement.style.colorScheme = isDark ? "dark" : "light";
+
+      try {
+        localStorage.setItem(THEME_STORAGE_KEY, isDark ? "dark" : "light");
+      } catch {
+        /* private mode */
+      }
+    });
+  }
+
+  // التفعيل عند تحميل الصفحة لأول مرة
+  initThemeToggle();
+
+  // دعم التنقل بين الصفحات في حال استخدام Astro View Transitions
+  document.addEventListener("astro:after-swap", initThemeToggle);
+</script>
