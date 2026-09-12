@@ -3,6 +3,10 @@ import { defineConfig } from 'astro/config';
 import react from '@astrojs/react';
 import tailwindcss from '@tailwindcss/vite';
 
+import sitemap from '@astrojs/sitemap';
+
+import robotsTxt from 'astro-robots-txt';
+
 const SITE = (
   process.env.PUBLIC_SITE_URL ||
   process.env.SITE_URL ||
@@ -23,7 +27,33 @@ export default defineConfig({
       prefixDefaultLocale: true,
     },
   },
-  integrations: [react()],
+  integrations: [react(), sitemap({
+    i18n: {
+      defaultLocale: 'en', // أو اللغّة الافتراضية لديك
+      locales: {
+        ar: 'ar',
+        en: 'en',
+      },
+    },
+    serialize(item) {
+      if (item.url === 'https://feyzologistics.com/en/' || item.url === 'https://feyzologistics.com/ar/') {
+        item.priority = 1.0;
+      } else {
+        item.priority = 0.8;
+      }
+      // @ts-ignore
+      item.changefreq = 'weekly';
+      return item;
+    },
+  }), robotsTxt({
+    policy: [
+      {
+        userAgent: '*',
+        allow: '/',
+      },
+    ],
+    sitemap: true,
+  })],
   vite: {
     plugins: [tailwindcss()],
   },
