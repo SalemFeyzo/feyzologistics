@@ -25,7 +25,7 @@ export async function LandingAccreditations() {
                 href={SIFFA_WEBSITE_URL}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="group relative flex h-28 w-full max-w-xs items-center justify-center rounded-xl outline-offset-4 transition-opacity hover:opacity-90 focus-visible:outline focus-visible:outline-2 focus-visible:outline-ring sm:h-32 md:h-36"
+                className="group relative flex h-28 w-full max-w-xs items-center justify-center rounded-xl outline-offset-4 transition-opacity hover:opacity-90 focus-visible:outline focus-visible:outline-ring sm:h-32 md:h-36"
                 aria-label={t("siffaLinkAria")}
               >
                 <Image
@@ -54,7 +54,7 @@ export async function LandingAccreditations() {
                 href={FIATA_WEBSITE_URL}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="group relative flex h-28 w-full max-w-xs items-center justify-center rounded-xl outline-offset-4 transition-opacity hover:opacity-90 focus-visible:outline focus-visible:outline-2 focus-visible:outline-ring sm:h-32 md:h-36"
+                className="group relative flex h-28 w-full max-w-xs items-center justify-center rounded-xl outline-offset-4 transition-opacity hover:opacity-90 focus-visible:outline focus-visible:outline-ring sm:h-32 md:h-36"
                 aria-label={t("fiataLinkAria")}
               >
                 <Image

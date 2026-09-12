@@ -1,9 +1,6 @@
 import { getTranslations } from "next-intl/server";
 import { Button } from "@/components/ui/button";
-import {
-  getContactEmail,
-  getPhoneDigits,
-} from "@/lib/contact-details";
+import { getContactEmail, getPhoneDigits } from "@/lib/contact-details";
 import { GOOGLE_MAPS_EMBED_SRC } from "@/lib/google-maps-embed";
 
 function formatPhoneDisplay(digits: string): string {
@@ -52,8 +49,7 @@ export async function LandingContact() {
   const phoneDisplay = formatPhoneDisplay(phoneDigits);
   const telHref = `tel:+${phoneDigits}`;
   const whatsappDigits =
-    process.env.NEXT_PUBLIC_WHATSAPP_NUMBER?.replace(/\D/g, "") ||
-    phoneDigits;
+    process.env.NEXT_PUBLIC_WHATSAPP_NUMBER?.replace(/\D/g, "") || phoneDigits;
   const whatsappDisplay = formatPhoneDisplay(whatsappDigits);
   const whatsappHref = `https://wa.me/${whatsappDigits}`;
 
@@ -73,7 +69,9 @@ export async function LandingContact() {
               >
                 {t("title")}
               </h2>
-              <p className="mt-4 max-w-2xl text-muted-foreground">{t("body")}</p>
+              <p className="mt-4 max-w-2xl text-muted-foreground">
+                {t("body")}
+              </p>
               <address className="mt-6 max-w-2xl not-italic text-sm text-muted-foreground">
                 <span className="font-medium text-foreground">
                   {t("addressLabel")}
@@ -123,7 +121,7 @@ export async function LandingContact() {
               <h3 className="mb-3 text-sm font-semibold tracking-tight text-foreground">
                 {t("mapTitle")}
               </h3>
-              <div className="relative aspect-[4/3] w-full overflow-hidden rounded-2xl border border-border bg-muted/50 shadow-sm ring-1 ring-black/5 dark:bg-muted/25 dark:ring-white/10">
+              <div className="relative aspect-4/3 w-full overflow-hidden rounded-2xl border border-border bg-muted/50 shadow-sm ring-1 ring-black/5 dark:bg-muted/25 dark:ring-white/10">
                 <iframe
                   src={GOOGLE_MAPS_EMBED_SRC}
                   title={t("mapIframeTitle")}

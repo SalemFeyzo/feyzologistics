@@ -22,7 +22,7 @@ export function LandingNavbar() {
 
   return (
     <header className="sticky top-0 z-50 w-full border-b border-border bg-background/90 backdrop-blur-md supports-backdrop-filter:bg-background/80">
-      <div className="container mx-auto flex min-h-18 max-w-6xl items-center justify-between gap-4 px-4 py-2 md:min-h-[5.25rem] md:px-6">
+      <div className="container mx-auto flex min-h-18 max-w-6xl items-center justify-between gap-4 px-4 py-2 md:min-h-21 md:px-6">
         <Link
           href="/"
           className="flex shrink-0 items-center gap-2"
