@@ -1,14 +1,14 @@
 ---
-// Redirect the root to the primary (Arabic) locale.
-// Static-safe meta refresh (Astro.redirect requires SSR output).
+import { LOCALE_REDIRECT_SCRIPT } from "@/lib/locale-inline-script";
 ---
 
 <!doctype html>
-<html lang="ar" dir="rtl">
+<html lang="en" dir="ltr">
   <head>
     <meta charset="utf-8" />
-    <meta http-equiv="refresh" content="0; url=/ar" />
-    <link rel="canonical" href="/ar" />
+    <script is:inline set:html={LOCALE_REDIRECT_SCRIPT}></script>
+    <noscript><meta http-equiv="refresh" content="0; url=/en" /></noscript>
+    <link rel="canonical" href="/en" />
     <title>Feyzo Logistics</title>
   </head>
   <body></body>
