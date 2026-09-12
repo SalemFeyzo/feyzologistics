@@ -1,41 +1,72 @@
 #!/usr/bin/env node
-/**
- * Generates static Open Graph images (public/og-ar.png, public/og-en.png) at
- * build time, mirroring the old Next.js `opengraph-image.tsx` output.
- *
- * Run via `pnpm prebuild` (automatically before `astro build`).
- */
 import { readFile, writeFile } from "node:fs/promises";
 import path from "node:path";
 import satori from "satori";
 import { Resvg } from "@resvg/resvg-js";
+import ArabicReshaper from "arabic-persian-reshaper";
 
 const root = process.cwd();
 const WIDTH = 1200;
 const HEIGHT = 630;
 
-const messages = {
-  ar: JSON.parse(
-    await readFile(path.join(root, "src/i18n/messages/ar.json"), "utf8"),
-  ),
-  en: JSON.parse(
-    await readFile(path.join(root, "src/i18n/messages/en.json"), "utf8"),
-  ),
-};
+const convertArabic =
+  ArabicReshaper.convertArabic ||
+  ArabicReshaper.default?.convertArabic ||
+  ArabicReshaper.default;
 
-const fonts = {
-  arabic400: await readFile(
-    path.join(root, "node_modules/@fontsource/tajawal/files/tajawal-arabic-400-normal.woff"),
-  ),
-  arabic700: await readFile(
-    path.join(root, "node_modules/@fontsource/tajawal/files/tajawal-arabic-700-normal.woff"),
-  ),
-  latin400: await readFile(
-    path.join(root, "node_modules/@fontsource/tajawal/files/tajawal-latin-400-normal.woff"),
-  ),
-  latin700: await readFile(
-    path.join(root, "node_modules/@fontsource/tajawal/files/tajawal-latin-700-normal.woff"),
-  ),
+async function getBase64DataUrl(filePath, mimeType) {
+  const fileBuffer = await readFile(filePath);
+  return `data:${mimeType};base64,${fileBuffer.toString("base64")}`;
+}
+
+// تقسيم النص العربي إلى أسطر متناسقة
+function splitArabicIntoLines(text, maxChars = 50) {
+  const words = text.split(" ");
+  const lines = [];
+  let currentLine = "";
+
+  for (const word of words) {
+    if ((currentLine + " " + word).trim().length > maxChars) {
+      if (currentLine) lines.push(currentLine.trim());
+      currentLine = word;
+    } else {
+      currentLine = currentLine ? `${currentLine} ${word}` : word;
+    }
+  }
+  if (currentLine) lines.push(currentLine.trim());
+  return lines;
+}
+
+// إعادة تشكيل وعكس سطر عربي واحد
+function fixArabicLine(text = "") {
+  if (!text) return "";
+
+  const clean = text
+    .replace(/…/g, "...")
+    .replace(/[—–]/g, "-")
+    .replace(/[“”«»]/g, '"')
+    .replace(/[‘’]/g, "'")
+    .replace(/[\u00A0\u200B-\u200F\u202A-\u202E\u2060\uFEFF]/g, " ")
+    .replace(/\s+/g, " ")
+    .trim();
+
+  const reshaped = typeof convertArabic === "function" ? convertArabic(clean) : clean;
+  return reshaped.split(" ").reverse().join(" ");
+}
+
+// 1. تحميل الصور والشعارات كـ Base64
+const bgBase64 = await getBase64DataUrl(path.join(root, "public/background.png"), "image/png");
+const logoArBase64 = await getBase64DataUrl(path.join(root, "public/logo/logo-dark-ar.png"), "image/png");
+const logoEnBase64 = await getBase64DataUrl(path.join(root, "public/logo/logo-dark-en.png"), "image/png");
+
+// 2. تحميل الخطوط الكاملة محلياً من مجلد scripts/fonts
+const tajawalRegular = await readFile(path.join(root, "scripts/fonts/Tajawal-Regular.ttf"));
+const tajawalBold = await readFile(path.join(root, "scripts/fonts/Tajawal-Bold.ttf"));
+
+// 3. تحميل ملفات الترجمة
+const messages = {
+  ar: JSON.parse(await readFile(path.join(root, "src/i18n/messages/ar.json"), "utf8")),
+  en: JSON.parse(await readFile(path.join(root, "src/i18n/messages/en.json"), "utf8")),
 };
 
 function h(type, props = {}, children = []) {
@@ -46,11 +77,23 @@ async function generate(locale) {
   const meta = messages[locale].Metadata;
   const hero = messages[locale].Hero;
   const isRtl = locale === "ar";
-  const brand = meta.siteName;
-  const headline = hero.headline.split("\n").filter(Boolean);
-  const description = meta.description;
-  const short =
-    description.length > 180 ? `${description.slice(0, 177)}…` : description;
+
+  const currentLogo = isRtl ? logoArBase64 : logoEnBase64;
+
+  const rawHeadlineLines = hero.headline.split("\n").filter(Boolean);
+  const rawDescription = meta.description;
+  const rawShort =
+    rawDescription.length > 160 ? `${rawDescription.slice(0, 157)}...` : rawDescription;
+
+  // معالجة العنوان الرئيسي
+  const headlineLines = rawHeadlineLines.map((line) =>
+    isRtl ? fixArabicLine(line) : line
+  );
+
+  // معالجة الوصف الثانوي (تقسيم للأسطر ثم تشكيل كل سطر)
+  const descLines = isRtl
+    ? splitArabicIntoLines(rawShort, 50).map((line) => fixArabicLine(line))
+    : [rawShort];
 
   const element = h(
     "div",
@@ -58,67 +101,137 @@ async function generate(locale) {
       style: {
         display: "flex",
         flexDirection: "column",
+        alignItems: "center",
         justifyContent: "center",
         width: "100%",
         height: "100%",
-        padding: 72,
-        backgroundColor: "#fafafa",
-        color: "#111111",
-        textAlign: isRtl ? "right" : "left",
-        direction: isRtl ? "rtl" : "ltr",
+        color: "#ffffff",
+        textAlign: "center",
         fontFamily: "Tajawal",
+        position: "relative",
       },
     },
     [
-      h("div", { style: { fontSize: 40, fontWeight: 700, marginBottom: 28 } }, brand),
-      ...headline.map((line, i) =>
-        h(
-          "div",
-          {
-            style: {
-              fontSize: i === 0 ? 52 : 44,
-              fontWeight: 700,
-              lineHeight: 1.15,
-              marginBottom: 10,
-            },
-          },
-          line,
-        ),
-      ),
+      // 1. صورة الخلفية كعنصر مستقل لتفادي مشاكل CSS في Satori
+      h("img", {
+        src: bgBase64,
+        style: {
+          position: "absolute",
+          top: 0,
+          left: 0,
+          width: "100%",
+          height: "100%",
+          objectFit: "cover",
+        },
+      }),
+
+      // 2. طبقة التعتيم الشفافة الداكنة
+      h("div", {
+        style: {
+          position: "absolute",
+          top: 0,
+          left: 0,
+          width: "100%",
+          height: "100%",
+          backgroundColor: "rgba(0, 0, 0, 0.55)",
+          display: "flex",
+        },
+      }),
+
+      // 3. المحتوى (اللوغو والنصوص) فوق التعتيم
       h(
         "div",
         {
           style: {
-            marginTop: 28,
-            fontSize: 26,
-            color: "#3a3a3a",
-            maxWidth: 920,
-            lineHeight: 1.4,
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            justifyContent: "center",
+            width: "100%",
+            height: "100%",
+            padding: "60px 80px",
           },
         },
-        short,
+        [
+          // الشعار
+          h("img", {
+            src: currentLogo,
+            style: {
+              height: "90px",
+              marginBottom: "36px",
+              objectFit: "contain",
+            },
+          }),
+
+          // العنوان الرئيسي
+          ...headlineLines.map((line, i) =>
+            h(
+              "div",
+              {
+                style: {
+                  fontSize: i === 0 ? 52 : 44,
+                  fontWeight: 700,
+                  lineHeight: 1.3,
+                  marginBottom: 10,
+                  color: "#ffffff",
+                  textShadow: "0 2px 10px rgba(0,0,0,0.6)",
+                },
+              },
+              line
+            )
+          ),
+
+          // الوصف الثانوي
+          h(
+            "div",
+            {
+              style: {
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "center",
+                marginTop: 20,
+                maxWidth: 920,
+              },
+            },
+            descLines.map((line) =>
+              h(
+                "div",
+                {
+                  style: {
+                    fontSize: 24,
+                    color: "#f1f5f9",
+                    lineHeight: 1.4,
+                    textShadow: "0 1px 5px rgba(0,0,0,0.6)",
+                    marginBottom: 4,
+                  },
+                },
+                line
+              )
+            )
+          ),
+        ]
       ),
-    ],
+    ]
   );
 
   const svg = await satori(element, {
     width: WIDTH,
     height: HEIGHT,
     fonts: [
-      { name: "Tajawal", data: fonts.arabic400, weight: 400, style: "normal" },
-      { name: "Tajawal", data: fonts.latin400, weight: 400, style: "normal" },
-      { name: "Tajawal", data: fonts.arabic700, weight: 700, style: "normal" },
-      { name: "Tajawal", data: fonts.latin700, weight: 700, style: "normal" },
+      { name: "Tajawal", data: tajawalBold, weight: 700, style: "normal" },
+      { name: "Tajawal", data: tajawalRegular, weight: 400, style: "normal" },
     ],
   });
 
-  const png = new Resvg(svg, { fitTo: { mode: "width", value: WIDTH } })
+  const png = new Resvg(svg, {
+    fitTo: { mode: "width", value: WIDTH },
+  })
     .render()
     .asPng();
 
   const out = path.join(root, "public", `og-${locale}.png`);
   await writeFile(out, png);
-  console.log(`✓ generated ${out} (${png.length} bytes)`);
+  console.log(`✓ Generated ${out} (${png.length} bytes)`);
 }
 
 await generate("ar");
