@@ -19,7 +19,7 @@ const t = useTranslations(locale, "Navbar");
   ]}
   aria-label={t("themeDark")}
 >
-  <!-- أيقونة الشمس (تظهر في المود الداكن فقط) -->
+  <!-- Sun Icon (Dark Mode) -->
   <svg
     class="hidden size-5 dark:block"
     viewBox="0 0 24 24"
@@ -30,12 +30,10 @@ const t = useTranslations(locale, "Navbar");
     stroke-linejoin="round"
   >
     <circle cx="12" cy="12" r="4"></circle>
-    <path
-      d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"
-    ></path>
+    <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"></path>
   </svg>
 
-  <!-- أيقونة القمر (تظهر في المود الفاتح فقط) -->
+  <!-- Moon Icon (Light Mode) -->
   <svg
     class="block size-5 dark:hidden"
     viewBox="0 0 24 24"
@@ -56,6 +54,7 @@ const t = useTranslations(locale, "Navbar");
     const button = document.getElementById("theme-toggle");
     if (!button) return;
 
+    // Toggle button handler
     button.addEventListener("click", () => {
       const isDark = document.documentElement.classList.toggle("dark");
       document.documentElement.style.colorScheme = isDark ? "dark" : "light";
@@ -63,14 +62,20 @@ const t = useTranslations(locale, "Navbar");
       try {
         localStorage.setItem(THEME_STORAGE_KEY, isDark ? "dark" : "light");
       } catch {
-        /* private mode */
+        /* private mode fallback */
+      }
+    });
+
+    // Listen for OS system theme changes in real-time (if user hasn't set an explicit override)
+    window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change", (e) => {
+      if (!localStorage.getItem(THEME_STORAGE_KEY)) {
+        const isDark = e.matches;
+        document.documentElement.classList.toggle("dark", isDark);
+        document.documentElement.style.colorScheme = isDark ? "dark" : "light";
       }
     });
   }
 
-  // التفعيل عند تحميل الصفحة لأول مرة
   initThemeToggle();
-
-  // دعم التنقل بين الصفحات في حال استخدام Astro View Transitions
   document.addEventListener("astro:after-swap", initThemeToggle);
 </script>
