@@ -1,4 +1,5 @@
 ---
+import { Image } from 'astro:assets';
 import { useTranslations, type AppLocale } from "@/i18n";
 import { FIATA_WEBSITE_URL, SIFFA_WEBSITE_URL } from "@/lib/site";
 
@@ -32,10 +33,12 @@ const t = useTranslations(locale, "Accreditations");
             class="group relative flex h-28 w-full max-w-xs items-center justify-center rounded-xl outline-offset-4 transition-opacity hover:opacity-90 focus-visible:outline focus-visible:outline-ring sm:h-32 md:h-36"
             aria-label={t("siffaLinkAria")}
           >
-            <img
+            <Image
               src="/logo-siffa.png"
               alt={t("siffaLogoAlt")}
               class="max-h-full w-auto max-w-full object-contain object-center"
+              width={320}
+              height={40}
             />
           </a>
           <p class="mt-5 max-w-sm text-sm font-medium leading-relaxed text-foreground md:text-base">
@@ -58,10 +61,12 @@ const t = useTranslations(locale, "Accreditations");
             class="group relative flex h-28 w-full max-w-xs items-center justify-center rounded-xl outline-offset-4 transition-opacity hover:opacity-90 focus-visible:outline focus-visible:outline-ring sm:h-32 md:h-36"
             aria-label={t("fiataLinkAria")}
           >
-            <img
+            <Image
               src="/logo-fiata.png"
               alt={t("fiataLogoAlt")}
               class="max-h-full w-auto max-w-full object-contain object-center"
+              width={143}
+              height={143}
             />
           </a>
           <p class="mt-5 max-w-sm text-sm font-medium leading-relaxed text-foreground md:text-base">

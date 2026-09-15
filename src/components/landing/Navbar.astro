@@ -1,8 +1,10 @@
 ---
+import { Image } from "astro:assets";
 import Button from "@/components/ui/Button.astro";
 import  ThemeToggle  from "@/components/ThemeToggle.astro";
 import { useTranslations, type AppLocale } from "@/i18n";
 import { PREFERRED_LOCALE_KEY } from "@/lib/locale-inline-script";
+
 
 interface Props {
   locale: AppLocale;
@@ -22,10 +24,14 @@ const storePreferenceScript = `(function(){var k=${JSON.stringify(
 <header class="sticky top-0 z-50 w-full border-b border-border bg-background/90 backdrop-blur-md supports-backdrop-filter:bg-background/80">
   <div class="container mx-auto flex min-h-18 max-w-6xl items-center justify-between gap-4 px-4 py-2 md:min-h-21 md:px-6">
     <a href={`/${locale}`} class="flex shrink-0 items-center gap-2">
-      <img
+      <Image
         src={logoSrc}
         alt={t("logoAlt")}
         class="max-h-12 w-auto max-w-none object-contain sm:max-h-14 md:max-h-16 dark:invert"
+        width={135}
+        height={64}
+        loading="eager"
+        fetchpriority="high"
       />
     </a>
 

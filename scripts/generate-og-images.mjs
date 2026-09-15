@@ -4,6 +4,7 @@ import path from "node:path";
 import satori from "satori";
 import { Resvg } from "@resvg/resvg-js";
 import ArabicReshaper from "arabic-persian-reshaper";
+import sharp from "sharp";
 
 const root = process.cwd();
 const WIDTH = 1200;
@@ -90,7 +91,7 @@ async function generate(locale) {
     isRtl ? fixArabicLine(line) : line
   );
 
-  // معالجة الوصف الثانوي (تقسيم للأسطر ثم تشكيل كل سطر)
+  // معالجة الوصف الثانوي
   const descLines = isRtl
     ? splitArabicIntoLines(rawShort, 50).map((line) => fixArabicLine(line))
     : [rawShort];
@@ -112,7 +113,7 @@ async function generate(locale) {
       },
     },
     [
-      // 1. صورة الخلفية كعنصر مستقل لتفادي مشاكل CSS في Satori
+      // 1. صورة الخلفية
       h("img", {
         src: bgBase64,
         style: {
@@ -125,7 +126,7 @@ async function generate(locale) {
         },
       }),
 
-      // 2. طبقة التعتيم الشفافة الداكنة
+      // 2. طبقة التعتيم
       h("div", {
         style: {
           position: "absolute",
@@ -138,7 +139,7 @@ async function generate(locale) {
         },
       }),
 
-      // 3. المحتوى (اللوغو والنصوص) فوق التعتيم
+      // 3. المحتوى
       h(
         "div",
         {
@@ -223,15 +224,24 @@ async function generate(locale) {
     ],
   });
 
-  const png = new Resvg(svg, {
+  const rawPng = new Resvg(svg, {
     fitTo: { mode: "width", value: WIDTH },
   })
     .render()
     .asPng();
 
+  // ضغط صورة PNG باستخدام Sharp لتناسب معايير واتساب (< 300KB)
+  const compressedPng = await sharp(rawPng)
+    .png({
+      quality: 80,
+      compressionLevel: 9,
+      palette: true, // تحويلها لـ 8-bit مع الحفاظ على الألوان والشفافية
+    })
+    .toBuffer();
+
   const out = path.join(root, "public", `og-${locale}.png`);
-  await writeFile(out, png);
-  console.log(`✓ Generated ${out} (${png.length} bytes)`);
+  await writeFile(out, compressedPng);
+  console.log(`✓ Generated ${out} (${(compressedPng.length / 1024).toFixed(1)} KB)`);
 }
 
 await generate("ar");
