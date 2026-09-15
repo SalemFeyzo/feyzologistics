@@ -6,6 +6,8 @@ import sitemap from '@astrojs/sitemap';
 
 import robotsTxt from 'astro-robots-txt';
 
+import vercel from '@astrojs/vercel';
+
 const SITE = (
   process.env.PUBLIC_SITE_URL ||
   process.env.SITE_URL ||
@@ -15,10 +17,13 @@ const SITE = (
 // https://astro.build/config
 export default defineConfig({
   site: SITE,
+
   // Consistent URLs + no duplicate `/ar` vs `/ar/` pages.
   trailingSlash: 'never',
+
   // Minify the HTML output (default, made explicit).
   compressHTML: true,
+
   i18n: {
     defaultLocale: 'ar',
     locales: ['ar', 'en'],
@@ -26,6 +31,7 @@ export default defineConfig({
       prefixDefaultLocale: true,
     },
   },
+
   integrations: [sitemap({
     i18n: {
       defaultLocale: 'en',
@@ -53,7 +59,10 @@ export default defineConfig({
     ],
     sitemap: true,
   })],
+
   vite: {
     plugins: [tailwindcss()],
   },
+
+  adapter: vercel(),
 });
