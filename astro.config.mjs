@@ -24,7 +24,7 @@ export default defineConfig({
   image: {
     service: imageService({
       // This can usually be auto-detected
-      fallbackService: "vercel",
+      fallbackService: "astro",
       placeholder: "blurhash",
       // This is the default
       layout: "constrained",
