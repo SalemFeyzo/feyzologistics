@@ -27,7 +27,7 @@ export default defineConfig({
       fallbackService: "sharp",
       placeholder: "blurhash",
       // This is the default
-      layout: "fullWidth",
+      layout: "constrained",
     }),
   },
   i18n: {

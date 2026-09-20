@@ -1,0 +1,47 @@
+---
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import Button from "@/components/ui/Button.astro";
+import { locales, useTranslations, type AppLocale } from "@/i18n";
+
+export function getStaticPaths() {
+  return locales.map((locale) => ({ params: { locale } }));
+}
+
+// const { locale } = Astro.params as { locale: AppLocale };
+
+const rawLocale = Astro.params.locale;
+const locale: AppLocale = (rawLocale === "ar" || rawLocale === "en") ? rawLocale : "en";
+
+const t = useTranslations(locale, "NotFound");
+
+---
+
+<BaseLayout 
+    locale={locale}
+    title={t("title")}
+    description={t("description")}
+  >
+  <script is:inline>
+    (function () {
+      var path = window.location.pathname;
+      if (path.startsWith("/ar")) {
+        window.location.replace("/ar/404");
+      } else {
+        window.location.replace("/en/404");
+      }
+    })();
+  </script>
+
+  <main class="container mx-auto flex min-h-[70vh] flex-col items-center justify-center px-4 text-center">
+    <div class="container mx-auto flex min-h-[70vh] flex-col items-center justify-center px-4 text-center">
+        <span class="text-8xl font-black text-primary">404</span>
+        <h1 class="mt-4 text-3xl font-bold text-foreground">
+        Page Not Found / الصفحة غير موجودة
+        </h1>
+        <div class="mt-8 flex justify-center gap-4">
+        <Button href="/en">English</Button>
+        <Button href="/ar">العربية</Button>
+        </div>
+    </div>
+  </main>
+</BaseLayout>

@@ -4,7 +4,7 @@ import en from "./messages/en.json";
 export type AppLocale = "ar" | "en";
 
 export const locales: AppLocale[] = ["ar", "en"];
-export const defaultLocale: AppLocale = "ar";
+export const defaultLocale: AppLocale = "en";
 
 export type JsonPrimitive = string | number | boolean | null;
 export type JsonValue =
@@ -36,7 +36,10 @@ export type Translator = ((key?: string) => string) & {
   raw: (key?: string) => JsonValue | undefined;
 };
 
-export function useTranslations(locale: AppLocale, namespace: string): Translator {
+export function useTranslations(
+  locale: AppLocale,
+  namespace: string,
+): Translator {
   const ns = dictionaries[locale][namespace] as JsonValue | undefined;
 
   const t = ((key?: string): string => {

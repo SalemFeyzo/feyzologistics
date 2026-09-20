@@ -1,4 +1,10 @@
 {
+  "NotFound": {
+    "title": "404 - Page Not Found",
+    "heading": "Page Not Found",
+    "description": "Sorry, the page you are looking for doesn't exist or has been moved.",
+    "backHome": "Back to Home"
+  },
   "Metadata": {
     "siteName": "Feyzo Logistics",
     "title": "Feyzo Logistics | Freight Forwarding & Customs Clearance Management",
