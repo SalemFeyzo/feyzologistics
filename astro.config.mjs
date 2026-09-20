@@ -1,11 +1,9 @@
 // @ts-check
 import { defineConfig } from 'astro/config';
 import tailwindcss from '@tailwindcss/vite';
-
+import { imageService } from "@unpic/astro/service";
 import sitemap from '@astrojs/sitemap';
-
 import robotsTxt from 'astro-robots-txt';
-
 import vercel from '@astrojs/vercel';
 
 const SITE = (
@@ -23,7 +21,15 @@ export default defineConfig({
 
   // Minify the HTML output (default, made explicit).
   compressHTML: true,
-
+  image: {
+    service: imageService({
+      // This can usually be auto-detected
+      fallbackService: "sharp",
+      placeholder: "blurhash",
+      // This is the default
+      layout: "fullWidth",
+    }),
+  },
   i18n: {
     defaultLocale: 'ar',
     locales: ['ar', 'en'],
@@ -38,7 +44,7 @@ export default defineConfig({
       locales: {
         ar: 'ar',
         en: 'en',
-      },
+      }
     },
     serialize(item) {
       if (item.url === 'https://feyzologistics.com/en/' || item.url === 'https://feyzologistics.com/ar/') {
