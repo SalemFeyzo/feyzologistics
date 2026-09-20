@@ -54,6 +54,8 @@ const gtagInline = gaId
     <title>{title}</title>
     <meta name="description" content={description} />
 
+    <link rel="manifest" href={`/manifest.${locale}.json`} />
+
     <link rel="icon" href="/favicon-light.ico" media="(prefers-color-scheme: light)" />
     <link rel="icon" href="/favicon-dark.ico" media="(prefers-color-scheme: dark)" />
 
@@ -81,6 +83,12 @@ const gtagInline = gaId
     <meta name="twitter:description" content={ogDescription} />
     <meta name="twitter:image" content={`${baseUrl}/og-${locale}.png`} />
 
+    <!-- تلوين شريط المتصفح في أجهزة الجوال -->
+    <meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)" />
+    <meta name="theme-color" content="#09090b" media="(prefers-color-scheme: dark)" />
+    <!-- أيقونة الشاشة الرئيسية لأجهزة iOS -->
+    <!-- <link rel="apple-touch-icon" href="/apple-touch-icon.png" /> -->
+
     <script is:inline set:html={LOCALE_REDIRECT_SCRIPT}></script>
     <script is:inline set:html={THEME_INIT_SCRIPT}></script>
 
@@ -88,6 +96,10 @@ const gtagInline = gaId
 
     {gaId ? (
       <>
+        <link rel="preconnect" href="https://www.googletagmanager.com" />
+        <link rel="preconnect" href="https://www.google-analytics.com" />
+        <link rel="dns-prefetch" href="https://www.googletagmanager.com" />
+        <link rel="dns-prefetch" href="https://www.google-analytics.com" />
         <script async src={`https://www.googletagmanager.com/gtag/js?id=${gaId}`}></script>
         <script is:inline set:html={gtagInline}></script>
       </>
