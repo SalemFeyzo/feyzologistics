@@ -20,6 +20,22 @@
             "purpose": "maskable"
         }
     ],
+    "screenshots": [
+        {
+            "src": "/screenshots/desktop-ar.png",
+            "sizes": "1350x614",
+            "type": "image/png",
+            "form_factor": "wide",
+            "label": "واجهة فيزو للخدمات اللوجستية على المكتبي"
+        },
+        {
+            "src": "/screenshots/mobile-ar.png",
+            "sizes": "540x1200",
+            "type": "image/png",
+            "form_factor": "narrow",
+            "label": "واجهة تطبيق فيزو للخدمات اللوجستية على الجوال"
+        }
+    ],
     "theme_color": "#09090b",
     "background_color": "#09090b",
     "display": "standalone"

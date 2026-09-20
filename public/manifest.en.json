@@ -20,6 +20,22 @@
             "purpose": "maskable"
         }
     ],
+    "screenshots": [
+        {
+            "src": "/screenshots/desktop-en.png",
+            "sizes": "1350x614",
+            "type": "image/png",
+            "form_factor": "wide",
+            "label": "Feyzo Logistics Desktop Interface"
+        },
+        {
+            "src": "/screenshots/mobile-en.png",
+            "sizes": "540x1200",
+            "type": "image/png",
+            "form_factor": "narrow",
+            "label": "Feyzo Logistics Mobile Interface"
+        }
+    ],
     "theme_color": "#09090b",
     "background_color": "#09090b",
     "display": "standalone"
