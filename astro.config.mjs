@@ -1,7 +1,6 @@
 // @ts-check
 import { defineConfig } from 'astro/config';
 import tailwindcss from '@tailwindcss/vite';
-import { imageService } from "@unpic/astro/service";
 import sitemap from '@astrojs/sitemap';
 import robotsTxt from 'astro-robots-txt';
 import vercel from '@astrojs/vercel';
@@ -21,15 +20,6 @@ export default defineConfig({
 
   // Minify the HTML output (default, made explicit).
   compressHTML: true,
-  image: {
-    service: imageService({
-      // This can usually be auto-detected
-      fallbackService: "astro",
-      placeholder: "blurhash",
-      // This is the default
-      layout: "constrained",
-    }),
-  },
   i18n: {
     defaultLocale: 'ar',
     locales: ['ar', 'en'],
@@ -70,5 +60,7 @@ export default defineConfig({
     plugins: [tailwindcss()],
   },
 
-  adapter: vercel(),
+  adapter: vercel({
+    imageService: true,
+  }),
 });

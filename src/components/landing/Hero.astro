@@ -1,5 +1,5 @@
 ---
-import { Image } from "@unpic/astro";
+import { Image } from "astro:assets";
 import Button from "@/components/ui/Button.astro";
 import { useTranslations, type AppLocale } from "@/i18n";
 
@@ -21,8 +21,6 @@ const t = useTranslations(locale, "Hero");
     class="absolute inset-0 h-full w-full object-cover object-center"
     width={800}
     height={600}
-    placeholder="blurhash"
-    layout="fullWidth"
     loading="eager"
     fetchpriority="high"
   />
