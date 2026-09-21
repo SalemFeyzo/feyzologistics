@@ -40,9 +40,9 @@ const ogLocale = isRtl ? "ar_SY" : "en_US";
 const alternateLocale = isRtl ? "en_US" : "ar_SY";
 
 const gaId = import.meta.env.PUBLIC_GA_MEASUREMENT_ID;
-const gtagInline = gaId
-  ? `window.dataLayer = window.dataLayer || []; function gtag(){dataLayer.push(arguments);} gtag('js', new Date()); gtag('config', '${gaId}');`
-  : "";
+// const gtagInline = gaId
+//   ? `window.dataLayer = window.dataLayer || []; function gtag(){dataLayer.push(arguments);} gtag('js', new Date()); gtag('config', '${gaId}');`
+//   : "";
 ---
 
 <!doctype html>
@@ -100,7 +100,7 @@ const gtagInline = gaId
     <script is:inline set:html={THEME_INIT_SCRIPT}></script>
 
     <JsonLd locale={locale} />
-
+<!-- 
     {gaId ? (
       <>
         <link rel="preconnect" href="https://www.googletagmanager.com" />
@@ -110,7 +110,24 @@ const gtagInline = gaId
         <script async src={`https://www.googletagmanager.com/gtag/js?id=${gaId}`}></script>
         <script is:inline set:html={gtagInline}></script>
       </>
-    ) : null}
+    ) : null} -->
+{gaId ? (
+  <script is:inline set:html={`
+    window.addEventListener('DOMContentLoaded', () => {
+      setTimeout(() => {
+        const script = document.createElement('script');
+        script.src = 'https://www.googletagmanager.com/gtag/js?id=${gaId}';
+        script.async = true;
+        document.head.appendChild(script);
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', '${gaId}');
+      }, 2500); 
+    });
+  `} />
+) : null}
+
   </head>
   <body class="min-h-full flex flex-col bg-background text-foreground antialiased">
     <slot />

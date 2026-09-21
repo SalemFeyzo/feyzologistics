@@ -1,241 +1,127 @@
 #!/usr/bin/env node
 import { readFile, writeFile } from "node:fs/promises";
 import path from "node:path";
-import satori from "satori";
-import { Resvg } from "@resvg/resvg-js";
-import ArabicReshaper from "arabic-persian-reshaper";
+import { createCanvas, loadImage, GlobalFonts } from "@napi-rs/canvas";
 import sharp from "sharp";
 
 const root = process.cwd();
 const WIDTH = 1200;
 const HEIGHT = 630;
 
-const convertArabic =
-  ArabicReshaper.convertArabic ||
-  ArabicReshaper.default?.convertArabic ||
-  ArabicReshaper.default;
+// 1. تسجيل الخطوط محلياً في Canvas
+GlobalFonts.registerFromPath(
+  path.join(root, "scripts/fonts/Tajawal-Regular.ttf"),
+  "Tajawal"
+);
+GlobalFonts.registerFromPath(
+  path.join(root, "scripts/fonts/Tajawal-Bold.ttf"),
+  "Tajawal"
+);
 
-async function getBase64DataUrl(filePath, mimeType) {
-  const fileBuffer = await readFile(filePath);
-  return `data:${mimeType};base64,${fileBuffer.toString("base64")}`;
-}
-
-// تقسيم النص العربي إلى أسطر متناسقة
-function splitArabicIntoLines(text, maxChars = 50) {
-  const words = text.split(" ");
-  const lines = [];
-  let currentLine = "";
-
-  for (const word of words) {
-    if ((currentLine + " " + word).trim().length > maxChars) {
-      if (currentLine) lines.push(currentLine.trim());
-      currentLine = word;
-    } else {
-      currentLine = currentLine ? `${currentLine} ${word}` : word;
-    }
-  }
-  if (currentLine) lines.push(currentLine.trim());
-  return lines;
-}
-
-// إعادة تشكيل وعكس سطر عربي واحد
-function fixArabicLine(text = "") {
-  if (!text) return "";
-
-  const clean = text
-    .replace(/…/g, "...")
-    .replace(/[—–]/g, "-")
-    .replace(/[“”«»]/g, '"')
-    .replace(/[‘’]/g, "'")
-    .replace(/[\u00A0\u200B-\u200F\u202A-\u202E\u2060\uFEFF]/g, " ")
-    .replace(/\s+/g, " ")
-    .trim();
-
-  const reshaped = typeof convertArabic === "function" ? convertArabic(clean) : clean;
-  return reshaped.split(" ").reverse().join(" ");
-}
-
-// 1. تحميل الصور والشعارات كـ Base64
-const bgBase64 = await getBase64DataUrl(path.join(root, "public/background.png"), "image/png");
-const logoArBase64 = await getBase64DataUrl(path.join(root, "public/logo/logo-dark-ar.png"), "image/png");
-const logoEnBase64 = await getBase64DataUrl(path.join(root, "public/logo/logo-dark-en.png"), "image/png");
-
-// 2. تحميل الخطوط الكاملة محلياً من مجلد scripts/fonts
-const tajawalRegular = await readFile(path.join(root, "scripts/fonts/Tajawal-Regular.ttf"));
-const tajawalBold = await readFile(path.join(root, "scripts/fonts/Tajawal-Bold.ttf"));
-
-// 3. تحميل ملفات الترجمة
+// 2. تحميل ملفات الترجمة
 const messages = {
   ar: JSON.parse(await readFile(path.join(root, "src/i18n/messages/ar.json"), "utf8")),
   en: JSON.parse(await readFile(path.join(root, "src/i18n/messages/en.json"), "utf8")),
 };
 
-function h(type, props = {}, children = []) {
-  return { type, props: { ...props, children } };
+// دالة تقسيم النص التلقائي بناءً على عرض العنصر في Canvas
+function wrapText(ctx, text, maxWidth) {
+  const words = text.split(" ");
+  const lines = [];
+  let currentLine = words[0] || "";
+
+  for (let i = 1; i < words.length; i++) {
+    const word = words[i];
+    const testLine = currentLine + " " + word;
+    const metrics = ctx.measureText(testLine);
+    if (metrics.width > maxWidth) {
+      lines.push(currentLine);
+      currentLine = word;
+    } else {
+      currentLine = testLine;
+    }
+  }
+  lines.push(currentLine);
+  return lines;
 }
 
 async function generate(locale) {
+  const isRtl = locale === "ar";
   const meta = messages[locale].Metadata;
   const hero = messages[locale].Hero;
-  const isRtl = locale === "ar";
 
-  const currentLogo = isRtl ? logoArBase64 : logoEnBase64;
+  const canvas = createCanvas(WIDTH, HEIGHT);
+  const ctx = canvas.getContext("2d");
 
-  const rawHeadlineLines = hero.headline.split("\n").filter(Boolean);
+  // أ) رسم صورة الخلفية
+  const bgImage = await loadImage(path.join(root, "public/background.png"));
+  ctx.drawImage(bgImage, 0, 0, WIDTH, HEIGHT);
+
+  // ب) رسم طبقة التعتيم (Overlay)
+  ctx.fillStyle = "rgba(0, 0, 0, 0.55)";
+  ctx.fillRect(0, 0, WIDTH, HEIGHT);
+
+  // ج) رسم الشعار (تم تكبير الارتفاع إلى 160)
+  const logoPath = isRtl
+    ? path.join(root, "public/logo/logo-dark-ar.png")
+    : path.join(root, "public/logo/logo-dark-en.png");
+  const logoImage = await loadImage(logoPath);
+
+  const logoHeight = 160; // تكبير اللوجو
+  const logoWidth = (logoImage.width / logoImage.height) * logoHeight;
+  const logoX = (WIDTH - logoWidth) / 2;
+  const logoY = 50; // موضع اللوجو من الأعلى
+  ctx.drawImage(logoImage, logoX, logoY, logoWidth, logoHeight);
+
+  // د) ضبط إعدادات المحاذاة والاتجاه للنصوص
+  ctx.textAlign = "center";
+  ctx.textBaseline = "top";
+  ctx.direction = isRtl ? "rtl" : "ltr";
+
+  // هـ) رسم العنوان الرئيسي (إزاحة النص للأسفل)
+  const headlineLines = hero.headline.split("\n").filter(Boolean);
+  let currentY = logoY + logoHeight + 45; // زيادة المسافة أسفل اللوجو لإزاحة النص للأسفل
+
+  ctx.fillStyle = "#ffffff";
+  ctx.shadowColor = "rgba(0, 0, 0, 0.6)";
+  ctx.shadowOffsetX = 0;
+  ctx.shadowOffsetY = 2;
+  ctx.shadowBlur = 10;
+
+  for (let i = 0; i < headlineLines.length; i++) {
+    const fontSize = i === 0 ? 52 : 44;
+    ctx.font = `bold ${fontSize}px Tajawal`;
+    const line = headlineLines[i];
+    ctx.fillText(line, WIDTH / 2, currentY);
+    currentY += fontSize * 1.3;
+  }
+
+  // و) رسم الوصف الثانوي
   const rawDescription = meta.description;
   const rawShort =
     rawDescription.length > 160 ? `${rawDescription.slice(0, 157)}...` : rawDescription;
 
-  // معالجة العنوان الرئيسي
-  const headlineLines = rawHeadlineLines.map((line) =>
-    isRtl ? fixArabicLine(line) : line
-  );
+  ctx.font = "400 24px Tajawal";
+  ctx.fillStyle = "#f1f5f9";
+  ctx.shadowOffsetY = 1;
+  ctx.shadowBlur = 5;
 
-  // معالجة الوصف الثانوي
-  const descLines = isRtl
-    ? splitArabicIntoLines(rawShort, 50).map((line) => fixArabicLine(line))
-    : [rawShort];
+  currentY += 20; // مسافة فاصلة إضافية قبل الوصف
+  const descLines = wrapText(ctx, rawShort, 920);
 
-  const element = h(
-    "div",
-    {
-      style: {
-        display: "flex",
-        flexDirection: "column",
-        alignItems: "center",
-        justifyContent: "center",
-        width: "100%",
-        height: "100%",
-        color: "#ffffff",
-        textAlign: "center",
-        fontFamily: "Tajawal",
-        position: "relative",
-      },
-    },
-    [
-      // 1. صورة الخلفية
-      h("img", {
-        src: bgBase64,
-        style: {
-          position: "absolute",
-          top: 0,
-          left: 0,
-          width: "100%",
-          height: "100%",
-          objectFit: "cover",
-        },
-      }),
+  for (const line of descLines) {
+    ctx.fillText(line, WIDTH / 2, currentY);
+    currentY += 24 * 1.4;
+  }
 
-      // 2. طبقة التعتيم
-      h("div", {
-        style: {
-          position: "absolute",
-          top: 0,
-          left: 0,
-          width: "100%",
-          height: "100%",
-          backgroundColor: "rgba(0, 0, 0, 0.55)",
-          display: "flex",
-        },
-      }),
+  // ز) تصدير الصورة وضغطها بواسطة Sharp
+  const rawPng = await canvas.toBuffer("image/png");
 
-      // 3. المحتوى
-      h(
-        "div",
-        {
-          style: {
-            display: "flex",
-            flexDirection: "column",
-            alignItems: "center",
-            justifyContent: "center",
-            width: "100%",
-            height: "100%",
-            padding: "60px 80px",
-          },
-        },
-        [
-          // الشعار
-          h("img", {
-            src: currentLogo,
-            style: {
-              height: "90px",
-              marginBottom: "36px",
-              objectFit: "contain",
-            },
-          }),
-
-          // العنوان الرئيسي
-          ...headlineLines.map((line, i) =>
-            h(
-              "div",
-              {
-                style: {
-                  fontSize: i === 0 ? 52 : 44,
-                  fontWeight: 700,
-                  lineHeight: 1.3,
-                  marginBottom: 10,
-                  color: "#ffffff",
-                  textShadow: "0 2px 10px rgba(0,0,0,0.6)",
-                },
-              },
-              line
-            )
-          ),
-
-          // الوصف الثانوي
-          h(
-            "div",
-            {
-              style: {
-                display: "flex",
-                flexDirection: "column",
-                alignItems: "center",
-                marginTop: 20,
-                maxWidth: 920,
-              },
-            },
-            descLines.map((line) =>
-              h(
-                "div",
-                {
-                  style: {
-                    fontSize: 24,
-                    color: "#f1f5f9",
-                    lineHeight: 1.4,
-                    textShadow: "0 1px 5px rgba(0,0,0,0.6)",
-                    marginBottom: 4,
-                  },
-                },
-                line
-              )
-            )
-          ),
-        ]
-      ),
-    ]
-  );
-
-  const svg = await satori(element, {
-    width: WIDTH,
-    height: HEIGHT,
-    fonts: [
-      { name: "Tajawal", data: tajawalBold, weight: 700, style: "normal" },
-      { name: "Tajawal", data: tajawalRegular, weight: 400, style: "normal" },
-    ],
-  });
-
-  const rawPng = new Resvg(svg, {
-    fitTo: { mode: "width", value: WIDTH },
-  })
-    .render()
-    .asPng();
-
-  // ضغط صورة PNG باستخدام Sharp لتناسب معايير واتساب (< 300KB)
   const compressedPng = await sharp(rawPng)
     .png({
       quality: 80,
       compressionLevel: 9,
-      palette: true, // تحويلها لـ 8-bit مع الحفاظ على الألوان والشفافية
+      palette: true,
     })
     .toBuffer();
 
