@@ -40,38 +40,35 @@ const ogLocale = isRtl ? "ar_SY" : "en_US";
 const alternateLocale = isRtl ? "en_US" : "ar_SY";
 
 const gaId = import.meta.env.PUBLIC_GA_MEASUREMENT_ID;
-// const gtagInline = gaId
-//   ? `window.dataLayer = window.dataLayer || []; function gtag(){dataLayer.push(arguments);} gtag('js', new Date()); gtag('config', '${gaId}');`
-//   : "";
 ---
 
 <!doctype html>
 <html lang={locale} dir={dir} class="h-full">
   <head>
+    <!-- Essential Meta Tags -->
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="generator" content={Astro.generator} />
+
     <title>{title}</title>
     <meta name="description" content={description} />
 
+    <!-- Favicons & App Icons -->
     <link rel="icon" type="image/png" href="/favicon-96x96.png" sizes="96x96" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="shortcut icon" href="/favicon.ico" />
     <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
     <meta name="apple-mobile-web-app-title" content={title} />
-
     <link rel="manifest" href={`/manifest.${locale}.json`} />
 
-
-    <!-- <link rel="icon" href="/favicon-light.ico" media="(prefers-color-scheme: light)" />
-    <link rel="icon" href="/favicon-dark.ico" media="(prefers-color-scheme: dark)" /> -->
-
+    <!-- Canonical & i18n Alternate Links -->
     <link rel="canonical" href={canonical} />
     <link rel="alternate" hreflang="x-default" href={defaultHref} />
     {locales.map((loc) => (
       <link rel="alternate" hreflang={loc} href={`${baseUrl}/${loc}${suffix}`} />
     ))}
 
+    <!-- Open Graph (Social Sharing) -->
     <meta property="og:type" content="website" />
     <meta property="og:site_name" content={resolvedSiteName} />
     <meta property="og:title" content={title} />
@@ -85,49 +82,44 @@ const gaId = import.meta.env.PUBLIC_GA_MEASUREMENT_ID;
     <meta property="og:image:type" content="image/png" />
     <meta property="og:image:alt" content={resolvedSiteName} />
 
+    <!-- Twitter Cards -->
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content={title} />
     <meta name="twitter:description" content={ogDescription} />
     <meta name="twitter:image" content={`${baseUrl}/og-${locale}.png`} />
 
-    <!-- تلوين شريط المتصفح في أجهزة الجوال -->
+    <!-- Mobile Browser Theme Color -->
     <meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)" />
     <meta name="theme-color" content="#09090b" media="(prefers-color-scheme: dark)" />
-    <!-- أيقونة الشاشة الرئيسية لأجهزة iOS -->
-    <!-- <link rel="apple-touch-icon" href="/apple-touch-icon.png" /> -->
 
-    <script is:inline set:html={LOCALE_REDIRECT_SCRIPT}></script>
-    <script is:inline set:html={THEME_INIT_SCRIPT}></script>
+    <!-- Core Inline Scripts -->
+    <script is:inline set:html={LOCALE_REDIRECT_SCRIPT} />
+    <script is:inline set:html={THEME_INIT_SCRIPT} />
 
+    <!-- Structured Data -->
     <JsonLd locale={locale} />
-<!-- 
-    {gaId ? (
-      <>
-        <link rel="preconnect" href="https://www.googletagmanager.com" />
-        <link rel="preconnect" href="https://www.google-analytics.com" />
-        <link rel="dns-prefetch" href="https://www.googletagmanager.com" />
-        <link rel="dns-prefetch" href="https://www.google-analytics.com" />
-        <script async src={`https://www.googletagmanager.com/gtag/js?id=${gaId}`}></script>
-        <script is:inline set:html={gtagInline}></script>
-      </>
-    ) : null} -->
-{gaId ? (
-  <script is:inline set:html={`
-    window.addEventListener('DOMContentLoaded', () => {
-      setTimeout(() => {
-        const script = document.createElement('script');
-        script.src = 'https://www.googletagmanager.com/gtag/js?id=${gaId}';
-        script.async = true;
-        document.head.appendChild(script);
-        window.dataLayer = window.dataLayer || [];
-        function gtag(){dataLayer.push(arguments);}
-        gtag('js', new Date());
-        gtag('config', '${gaId}');
-      }, 2500); 
-    });
-  `} />
-) : null}
 
+    <!-- Google Analytics (Deferred to optimize TBT) -->
+    {gaId && (
+      <script
+        is:inline
+        set:html={`
+          window.addEventListener('DOMContentLoaded', () => {
+            setTimeout(() => {
+              const script = document.createElement('script');
+              script.src = 'https://www.googletagmanager.com/gtag/js?id=${gaId}';
+              script.async = true;
+              document.head.appendChild(script);
+
+              window.dataLayer = window.dataLayer || [];
+              function gtag(){dataLayer.push(arguments);}
+              gtag('js', new Date());
+              gtag('config', '${gaId}');
+            }, 2500);
+          });
+        `}
+      />
+    )}
   </head>
   <body class="min-h-full flex flex-col bg-background text-foreground antialiased">
     <slot />
