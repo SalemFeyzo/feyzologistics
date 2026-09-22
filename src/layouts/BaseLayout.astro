@@ -101,25 +101,27 @@ const gaId = import.meta.env.PUBLIC_GA_MEASUREMENT_ID;
 
     <!-- Google Analytics (Deferred to optimize TBT) -->
     {gaId && (
-      <script
-        is:inline
-        set:html={`
-          window.addEventListener('DOMContentLoaded', () => {
-            setTimeout(() => {
-              const script = document.createElement('script');
-              script.src = 'https://www.googletagmanager.com/gtag/js?id=${gaId}';
-              script.async = true;
-              document.head.appendChild(script);
+    <script is:inline set:html={`
+      function loadGTM() {
+        if (window.gtmLoaded) return;
+        window.gtmLoaded = true;
+        const script = document.createElement('script');
+        script.src = 'https://www.googletagmanager.com/gtag/js?id=${gaId}';
+        script.async = true;
+        document.head.appendChild(script);
 
-              window.dataLayer = window.dataLayer || [];
-              function gtag(){dataLayer.push(arguments);}
-              gtag('js', new Date());
-              gtag('config', '${gaId}');
-            }, 2500);
-          });
-        `}
-      />
-    )}
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', '${gaId}');
+      }
+
+      ['pointerdown', 'scroll', 'keydown', 'mousemove'].forEach(event => 
+        window.addEventListener(event, loadGTM, { once: true, passive: true })
+      );
+      setTimeout(loadGTM, 4000);
+    `} />
+  )}
   </head>
   <body class="min-h-full flex flex-col bg-background text-foreground antialiased">
     <slot />
