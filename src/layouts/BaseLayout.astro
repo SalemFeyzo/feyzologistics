@@ -12,6 +12,8 @@ interface Props {
   title: string;
   description: string;
   ogDescription?: string;
+  /** Absolute URL or root-relative path (e.g. "/og-service.png"). */
+  ogImage?: string;
   siteName?: string;
   /** Relative path within a locale ("" = home). */
   path?: string;
@@ -22,6 +24,7 @@ const {
   title,
   description,
   ogDescription = description,
+  ogImage,
   siteName,
   path = "",
 } = Astro.props;
@@ -32,7 +35,19 @@ const baseUrl = getBaseUrl();
 const isRtl = locale === "ar";
 const dir = isRtl ? "rtl" : "ltr";
 
-const cleanPath = path.replace(/\/+$/, "").replace(/^\//, "");
+// خريطة أكواد hreflang الكاملة لرفع كفاءة السيو الدولي والمحلي
+const HREFLANG_MAP: Record<AppLocale, string> = {
+  ar: "ar-SY",
+  en: "en-US",
+};
+
+// تنظيف آمن للمسار ضد التكرار، الهاش، المعلمات، والشرطات المزدوجة
+const cleanPath = path
+  .replace(/[?#].*$/, "")
+  .replace(/\.\./g, "")
+  .replace(/\/{2,}/g, "/")
+  .replace(/^\/+|\/+$/g, "");
+
 const suffix = cleanPath ? `/${cleanPath}` : "";
 const canonical = `${baseUrl}/${locale}${suffix}`;
 const defaultHref = `${baseUrl}/${defaultLocale}${suffix}`;
@@ -40,7 +55,25 @@ const defaultHref = `${baseUrl}/${defaultLocale}${suffix}`;
 const ogLocale = isRtl ? "ar_SY" : "en_US";
 const alternateLocale = isRtl ? "en_US" : "ar_SY";
 
-const gaId = import.meta.env.PUBLIC_GA_MEASUREMENT_ID;
+// صورة OG: دعم مخصصة لكل صفحة مع تطبيع المسار إلى URL مطلق
+const ogImageUrl = ogImage
+  ? ogImage.startsWith("http")
+    ? ogImage
+    : `${baseUrl}${ogImage.startsWith("/") ? ogImage : `/${ogImage}`}`
+  : `${baseUrl}/og-${locale}.png`;
+
+const ogImageAlt =
+  locale === "ar"
+    ? `${resolvedSiteName} — خدمات الشحن واللوجستيات`
+    : `${resolvedSiteName} — Freight & Logistics Services`;
+
+// وصف الصورة الافتراضية فقط عند استخدام الصورة الافتراضية
+const hasCustomOgImage = Boolean(ogImage);
+
+const gaId = import.meta.env.PUBLIC_GA_MEASUREMENT_ID?.trim() || null;
+const GA_FALLBACK_DELAY_MS = 4000;
+
+const twitterHandle = "@feyzo_logistics";
 ---
 
 <!doctype html>
@@ -49,24 +82,32 @@ const gaId = import.meta.env.PUBLIC_GA_MEASUREMENT_ID;
     <!-- Essential Meta Tags -->
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="generator" content={Astro.generator} />
+    <meta name="generator" content={Astro.generator ?? "Astro"} />
 
     <title>{title}</title>
     <meta name="description" content={description} />
+
+    <!-- Robots & Crawler Directives -->
+    <meta name="robots" content="index, follow, max-image-preview:large" />
+    <meta name="format-detection" content="telephone=no" />
 
     <!-- Favicons & App Icons -->
     <link rel="icon" type="image/png" href="/favicon-96x96.png" sizes="96x96" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="shortcut icon" href="/favicon.ico" />
     <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
-    <meta name="apple-mobile-web-app-title" content={title} />
+    <meta name="apple-mobile-web-app-title" content={resolvedSiteName} />
     <link rel="manifest" href={`/manifest.${locale}.json`} />
 
     <!-- Canonical & i18n Alternate Links -->
     <link rel="canonical" href={canonical} />
     <link rel="alternate" hreflang="x-default" href={defaultHref} />
     {locales.map((loc) => (
-      <link rel="alternate" hreflang={loc} href={`${baseUrl}/${loc}${suffix}`} />
+      <link
+        rel="alternate"
+        hreflang={HREFLANG_MAP[loc]}
+        href={`${baseUrl}/${loc}${suffix}`}
+      />
     ))}
 
     <!-- Open Graph (Social Sharing) -->
@@ -77,21 +118,37 @@ const gaId = import.meta.env.PUBLIC_GA_MEASUREMENT_ID;
     <meta property="og:url" content={canonical} />
     <meta property="og:locale" content={ogLocale} />
     <meta property="og:locale:alternate" content={alternateLocale} />
-    <meta property="og:image" content={`${baseUrl}/og-${locale}.png`} />
-    <meta property="og:image:width" content="1200" />
-    <meta property="og:image:height" content="630" />
-    <meta property="og:image:type" content="image/png" />
-    <meta property="og:image:alt" content={resolvedSiteName} />
+    <meta property="og:image" content={ogImageUrl} />
+    <meta property="og:image:secure_url" content={ogImageUrl} />
+    {!hasCustomOgImage && (
+      <>
+        <meta property="og:image:width" content="1200" />
+        <meta property="og:image:height" content="630" />
+        <meta property="og:image:type" content="image/png" />
+      </>
+    )}
+    <meta property="og:image:alt" content={ogImageAlt} />
 
     <!-- Twitter Cards -->
     <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:site" content={twitterHandle} />
+    <meta name="twitter:creator" content={twitterHandle} />
     <meta name="twitter:title" content={title} />
     <meta name="twitter:description" content={ogDescription} />
-    <meta name="twitter:image" content={`${baseUrl}/og-${locale}.png`} />
+    <meta name="twitter:image" content={ogImageUrl} />
+    <meta name="twitter:image:alt" content={ogImageAlt} />
 
     <!-- Mobile Browser Theme Color -->
     <meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)" />
     <meta name="theme-color" content="#09090b" media="(prefers-color-scheme: dark)" />
+
+    <!-- Preconnect & DNS-Prefetch for External Analytics -->
+    {gaId && (
+      <>
+        <link rel="preconnect" href="https://www.googletagmanager.com" />
+        <link rel="dns-prefetch" href="https://www.googletagmanager.com" />
+      </>
+    )}
 
     <!-- Core Inline Scripts -->
     <script is:inline set:html={LOCALE_REDIRECT_SCRIPT} />
@@ -103,29 +160,41 @@ const gaId = import.meta.env.PUBLIC_GA_MEASUREMENT_ID;
     <!-- WebMCP Component -->
     <WebMcp locale={locale} />
 
-    <!-- Google Analytics (Deferred to optimize TBT) -->
+    <!-- Google Analytics (Deferred, safe, onload-handled) -->
     {gaId && (
-    <script is:inline set:html={`
-      function loadGTM() {
-        if (window.gtmLoaded) return;
-        window.gtmLoaded = true;
-        const script = document.createElement('script');
-        script.src = 'https://www.googletagmanager.com/gtag/js?id=${gaId}';
-        script.async = true;
-        document.head.appendChild(script);
+      <script
+        is:inline
+        set:html={`
+          window.dataLayer = window.dataLayer || [];
+          window.gtag = window.gtag || function(){ window.dataLayer.push(arguments); };
+          window.gtag('js', new Date());
 
-        window.dataLayer = window.dataLayer || [];
-        function gtag(){dataLayer.push(arguments);}
-        gtag('js', new Date());
-        gtag('config', '${gaId}');
-      }
+          (function () {
+            const events = ['pointerdown', 'keydown', 'touchstart', 'scroll'];
+            let timer;
 
-      ['pointerdown', 'scroll', 'keydown', 'mousemove'].forEach(event => 
-        window.addEventListener(event, loadGTM, { once: true, passive: true })
-      );
-      setTimeout(loadGTM, 4000);
-    `} />
-  )}
+            function loadGTM() {
+              if (window.gtmLoaded) return;
+              window.gtmLoaded = true;
+
+              events.forEach(event => window.removeEventListener(event, loadGTM));
+              if (timer) clearTimeout(timer);
+
+              const script = document.createElement('script');
+              script.src = 'https://www.googletagmanager.com/gtag/js?id=${gaId}';
+              script.async = true;
+              script.onload = () => window.gtag('config', '${gaId}');
+              document.head.appendChild(script);
+            }
+
+            events.forEach(event =>
+              window.addEventListener(event, loadGTM, { once: true, passive: true })
+            );
+            timer = setTimeout(loadGTM, ${GA_FALLBACK_DELAY_MS});
+          })();
+        `}
+      />
+    )}
   </head>
   <body class="min-h-full flex flex-col bg-background text-foreground antialiased">
     <slot />
