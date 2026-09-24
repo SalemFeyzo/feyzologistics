@@ -18,20 +18,26 @@ const tServices = useTranslations(locale, "Services");
 const baseUrl = getBaseUrl();
 const pageUrl = `${baseUrl}/${locale}`;
 const logoUrl = `${baseUrl}${locale === "ar" ? "/logo-ar.svg" : "/logo-en.svg"}`;
+const ogImageUrl = `${baseUrl}/og-${locale}.png`;
 const businessId = `${baseUrl}/#business`;
 const websiteId = `${baseUrl}/#website`;
+const webPageId = `${pageUrl}/#webpage`;
 const siffaOrgId = `${baseUrl}/#organization-siffa`;
 const fiataOrgId = `${baseUrl}/#organization-fiata`;
 
-/** Same legal entity: Arabic + English trade names for cross-language entity reconciliation. */
+/** أسماء الكيان التجاري باللغتين لربط الكيان عابر اللغات (Cross-Language Entity Reconciliation) */
 const ENTITY_NAMES = ["Feyzo Logistics", "فيزو للخدمات اللوجستية"] as const;
 
 const businessName = t("siteName");
-const serviceItems =
-  (tServices.raw("items") as { title: string; description: string }[] | undefined) ??
-  [];
-const coreServices = serviceItems.slice(0, 3);
+const rawServiceItems =
+  (tServices.raw("items") as { title: string; description: string }[] | undefined) ?? [];
 
+// تصفية الخدمات والتأكد من وجود العنوان والوصف لكل خدمة
+const serviceItems = rawServiceItems.filter(
+  (item) => item?.title && item?.description
+);
+
+// العنوان البريدي
 const postalAddress = {
   "@type": "PostalAddress",
   streetAddress: t("address.streetAddress"),
@@ -40,15 +46,41 @@ const postalAddress = {
   addressCountry: t("address.addressCountry"),
 };
 
-const makesOffer = coreServices.map((item) => ({
-  "@type": "Offer",
-  itemOffered: {
-    "@type": "Service",
-    name: item.title,
-    description: item.description,
-  },
-}));
+// الإحداثيات الجغرافية لمقر الشركة في اللاذقية (قيم رقمية قياسية)
+const geoCoordinates = {
+  "@type": "GeoCoordinates",
+  latitude: 35.5317,
+  longitude: 35.7909,
+};
 
+// قائمة روابط التواصل الاجتماعي مع تنظيف القوائم الفارغة
+const socialUrls = getSocialProfileUrls();
+const sameAs = socialUrls.length > 0 ? socialUrls : undefined;
+
+// الأسماء البديلة للكيان مع تنظيف التكرار
+const alternateNames = ENTITY_NAMES.filter((n) => n !== businessName);
+const alternateName = alternateNames.length > 0 ? alternateNames : undefined;
+
+// كتالوج الخدمات الشامل مع تغليف العناصر بـ ListItem لضبط الترتيب معيارياً
+const hasOfferCatalog = {
+  "@type": "OfferCatalog",
+  name: locale === "ar" ? "خدمات الشحن واللوجستيات" : "Freight & Logistics Services",
+  itemListElement: serviceItems.map((item, index) => ({
+    "@type": "ListItem",
+    position: index + 1,
+    item: {
+      "@type": "Offer",
+      itemOffered: {
+        "@type": "Service",
+        name: item.title,
+        description: item.description,
+        provider: { "@id": businessId },
+      },
+    },
+  })),
+};
+
+// الجمعية السورية للشحن الدولي SIFFA (تنسيق مصفوفة موحد حسب اللغة)
 const siffaOrganization = {
   "@id": siffaOrgId,
   "@type": "Organization",
@@ -56,10 +88,14 @@ const siffaOrganization = {
     locale === "ar"
       ? "الجمعية السورية للشحن والإمداد الوطني"
       : "Syrian International Freight Forwarding Association",
-  alternateName: "SIFFA",
+  alternateName:
+    locale === "ar"
+      ? ["SIFFA", "الجمعية السورية لوكلاء الشحن الدولي"]
+      : ["SIFFA"],
   url: SIFFA_WEBSITE_URL,
 };
 
+// الاتحاد الدولي لوكلاء الشحن FIATA (تنسيق مصفوفة موحد حسب اللغة)
 const fiataOrganization = {
   "@id": fiataOrgId,
   "@type": "Organization",
@@ -67,27 +103,56 @@ const fiataOrganization = {
   alternateName:
     locale === "ar"
       ? ["FIATA", "الاتحاد الدولي لجمعيات الشحن والخدمات اللوجستية"]
-      : "FIATA",
+      : ["FIATA"],
   url: FIATA_WEBSITE_URL,
 };
+
+// وسوم النطاق المعرفي (knowsAbout) لتعريف الذكاء الاصطناعي بمجالات عمل الشركة
+const knowsAbout =
+  locale === "ar"
+    ? [
+        "الشحن البحري الدولي",
+        "شحن الحاويات FCL و LCL",
+        "التخليص الجمركي والترانزيت",
+        "شحن البضائع الفريدة والصب Breakbulk",
+        "الشحن المبرد Reefer Cargo",
+        "مرفأ اللاذقية",
+        "مرفأ طرطوس",
+        "إدارة الخدمات اللوجستية وسلاسل الإمداد",
+      ]
+    : [
+        "International Freight Forwarding",
+        "Ocean Freight Shipping (FCL/LCL)",
+        "Customs Clearance & Transit",
+        "Breakbulk & Heavy Lift Cargo",
+        "Reefer Container Shipping",
+        "Port of Latakia",
+        "Port of Tartous",
+        "Syrian Logistics & Supply Chain",
+      ];
+
+const contactEmail = getContactEmail();
+const contactTelephone = getTelephoneE164();
 
 const organizationAndLocalBusiness = {
   "@id": businessId,
   "@type": ["Organization", "LocalBusiness"],
   name: businessName,
-  legalName: businessName,
-  alternateName: ENTITY_NAMES.filter((n) => n !== businessName),
+  alternateName,
   knowsLanguage: ["ar", "en"],
   url: baseUrl,
-  image: [logoUrl],
-  logo: { "@type": "ImageObject", url: logoUrl },
+  image: [ogImageUrl, logoUrl],
+  logo: logoUrl,
   description: t("description"),
-  telephone: getTelephoneE164(),
-  email: getContactEmail(),
+  telephone: contactTelephone,
+  email: contactEmail,
   address: postalAddress,
-  sameAs: getSocialProfileUrls(),
+  geo: geoCoordinates,
+  priceRange: "$$",
+  sameAs,
   memberOf: [{ "@id": siffaOrgId }, { "@id": fiataOrgId }],
-  makesOffer,
+  hasOfferCatalog,
+  knowsAbout,
   areaServed: [
     {
       "@type": "Country",
@@ -96,20 +161,24 @@ const organizationAndLocalBusiness = {
     {
       "@type": "City",
       name: t("address.addressLocality"),
+      containedInPlace: {
+        "@type": "Country",
+        name: locale === "ar" ? "سوريا" : "Syria",
+      },
     },
   ],
   contactPoint: [
     {
       "@type": "ContactPoint",
-      telephone: getTelephoneE164(),
-      email: getContactEmail(),
-      contactType: locale === "ar" ? "خدمة العملاء" : "Customer service",
+      telephone: contactTelephone,
+      email: `mailto:${contactEmail}`,
+      contactType: "customer service",
+      description: locale === "ar" ? "خدمة العملاء" : "Customer service",
       areaServed: {
         "@type": "Country",
         name: locale === "ar" ? "سوريا" : "Syria",
       },
-      availableLanguage:
-        locale === "ar" ? ["ar", "en"] : ["en", "ar"],
+      availableLanguage: ["ar", "en"],
     },
   ],
 };
@@ -120,11 +189,12 @@ const website = {
   name: businessName,
   url: baseUrl,
   description: t("description"),
-  inLanguage: ["ar-SY", "en-US"],
+  inLanguage: locale === "ar" ? "ar-SY" : "en-US",
   publisher: { "@id": businessId },
 };
 
 const webPage = {
+  "@id": webPageId,
   "@type": "WebPage",
   name: t("title"),
   description: t("description"),
@@ -132,6 +202,10 @@ const webPage = {
   inLanguage: locale === "ar" ? "ar-SY" : "en-US",
   isPartOf: { "@id": websiteId },
   about: { "@id": businessId },
+  primaryImageOfPage: {
+    "@type": "ImageObject",
+    url: ogImageUrl,
+  },
 };
 
 const graph = {
