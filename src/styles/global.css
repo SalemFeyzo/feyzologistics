@@ -1,11 +1,34 @@
+/* ═══════════════════════════════════════════════════════════
+   Tailwind CSS v4
+   ═══════════════════════════════════════════════════════════ */
 @import "tailwindcss";
-@import "@fontsource-variable/geist";
+
+/* ═══════════════════════════════════════════════════════════
+   Fonts
+   ─────────────────────────────────────────────────────────
+   Geist (variable) — import via wght.css.
+     • Variable fonts don't expose subset-scoped entry points.
+     • wght.css declares all subsets via unicode-range; the browser
+       fetches only what it needs at runtime.
+     • There is NO "latin.css" for variable fonts.
+
+   Tajawal (static) — one file per weight.
+     • Subset is handled internally via unicode-range (arabic+latin).
+     • No "arabic-400.css" export exists.
+     ═══════════════════════════════════════════════════════════ */
+@import "@fontsource-variable/geist/wght.css";
 @import "@fontsource/tajawal/400.css";
 @import "@fontsource/tajawal/500.css";
 @import "@fontsource/tajawal/700.css";
 
+/* ═══════════════════════════════════════════════════════════
+   Custom Variants
+   ═══════════════════════════════════════════════════════════ */
 @custom-variant dark (&:is(.dark *));
 
+/* ═══════════════════════════════════════════════════════════
+   Theme — Inline (colors reference runtime CSS vars)
+   ═══════════════════════════════════════════════════════════ */
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
@@ -38,6 +61,7 @@
   --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
   --color-sidebar-border: var(--sidebar-border);
   --color-sidebar-ring: var(--sidebar-ring);
+
   --radius-sm: calc(var(--radius) * 0.6);
   --radius-md: calc(var(--radius) * 0.8);
   --radius-lg: var(--radius);
@@ -47,12 +71,47 @@
   --radius-4xl: calc(var(--radius) * 2.6);
 }
 
+/* ═══════════════════════════════════════════════════════════
+   Theme — Static (font stacks with fallback metrics)
+   ═══════════════════════════════════════════════════════════ */
 @theme {
-  --font-sans: "Geist Variable", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
-  --font-tajawal: "Tajawal", ui-sans-serif, system-ui, sans-serif;
-  --font-mono: ui-monospace, SFMono-Regular, Menlo, monospace;
+  --font-sans:
+    "Geist Variable", "Geist Fallback", ui-sans-serif, system-ui, -apple-system,
+    "Segoe UI", sans-serif;
+  --font-tajawal:
+    "Tajawal", "Tajawal Fallback", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
 }
 
+/* ═══════════════════════════════════════════════════════════
+   Font Metric Overrides
+   ─────────────────────────────────────────────────────────
+   Prevents Cumulative Layout Shift (CLS) during font swap by
+   matching fallback font metrics to the target font.
+   ═══════════════════════════════════════════════════════════ */
+@font-face {
+  font-family: "Geist Fallback";
+  src: local("Arial"), local("Helvetica"), local("system-ui");
+  size-adjust: 100.5%;
+  ascent-override: 96%;
+  descent-override: 24%;
+  line-gap-override: 0%;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Tajawal Fallback";
+  src: local("Arial"), local("Tahoma"), local("Noto Sans Arabic");
+  size-adjust: 100%;
+  ascent-override: 95%;
+  descent-override: 25%;
+  line-gap-override: 0%;
+  font-display: swap;
+}
+
+/* ═══════════════════════════════════════════════════════════
+   Design Tokens — Light Mode
+   ═══════════════════════════════════════════════════════════ */
 :root {
   --background: oklch(0.99 0 0);
   --foreground: oklch(0.12 0 0);
@@ -88,6 +147,9 @@
   --sidebar-ring: oklch(0.45 0 0);
 }
 
+/* ═══════════════════════════════════════════════════════════
+   Design Tokens — Dark Mode
+   ═══════════════════════════════════════════════════════════ */
 .dark {
   --background: oklch(0.11 0 0);
   --foreground: oklch(0.97 0 0);
@@ -122,6 +184,9 @@
   --sidebar-ring: oklch(0.5 0 0);
 }
 
+/* ═══════════════════════════════════════════════════════════
+   Base Layer
+   ═══════════════════════════════════════════════════════════ */
 @layer base {
   * {
     @apply border-border outline-ring/50;
@@ -129,11 +194,12 @@
 
   html {
     @apply font-sans;
-    text-rendering: optimizeLegibility;
     font-synthesis: none;
+    /* NOTE: text-rendering: optimizeLegibility removed —
+       flagged as a performance issue by web.dev on long text. */
   }
 
-  /* Arabic (rtl) uses the Tajawal typeface; English (ltr) keeps Geist (font-sans). */
+  /* Arabic (RTL) uses Tajawal; English (LTR) keeps Geist. */
   html[dir="rtl"] {
     @apply font-tajawal;
   }
