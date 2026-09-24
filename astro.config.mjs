@@ -47,7 +47,7 @@ export default defineConfig({
   // Build — fixes render-blocking CSS (Button.kDiMoq4a.css)
   // ═══════════════════════════════════════════════════════════
   build: {
-    inlineStylesheets: 'auto',
+    inlineStylesheets: 'always',
     assets: '_astro',
   },
 
