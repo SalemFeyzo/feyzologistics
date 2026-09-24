@@ -26,7 +26,7 @@
     "@tailwindcss/vite": "^4.3.3",
     "@types/node": "^20.19.43",
     "arabic-persian-reshaper": "^1.0.1",
-    "astro": "^7.3.3",
+    "astro": "^7.3.4",
     "astro-robots-txt": "^1.0.0",
     "clsx": "^2.1.1",
     "sharp": "^0.35.4",
@@ -35,6 +35,6 @@
     "typescript": "^5.9.3"
   },
   "dependencies": {
-    "@astrojs/vercel": "^11.0.10"
+    "@astrojs/vercel": "^11.0.11"
   }
 }

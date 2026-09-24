@@ -1,6 +1,7 @@
 ---
 import "@/styles/global.css";
 import JsonLd from "@/components/seo/JsonLd.astro";
+import WebMcp from "@/components/seo/WebMcp.astro";
 import { defaultLocale, locales, useTranslations, type AppLocale } from "@/i18n";
 import { getBaseUrl } from "@/lib/site";
 import { LOCALE_REDIRECT_SCRIPT } from "@/lib/locale-inline-script";
@@ -98,6 +99,9 @@ const gaId = import.meta.env.PUBLIC_GA_MEASUREMENT_ID;
 
     <!-- Structured Data -->
     <JsonLd locale={locale} />
+
+    <!-- WebMCP Component -->
+    <WebMcp locale={locale} />
 
     <!-- Google Analytics (Deferred to optimize TBT) -->
     {gaId && (

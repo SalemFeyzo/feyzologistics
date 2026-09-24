@@ -1,0 +1,144 @@
+---
+import { useTranslations, type AppLocale } from "@/i18n";
+import { getBaseUrl } from "@/lib/site";
+
+interface Props {
+  locale: AppLocale;
+}
+
+const { locale } = Astro.props;
+const t = useTranslations(locale, "WebMcp");
+const baseUrl = getBaseUrl();
+
+const i18nData = {
+  quoteDesc: t("quoteDesc"),
+  originDesc: t("originDesc"),
+  destDesc: t("destDesc"),
+  cargoDesc: t("cargoDesc"),
+  goodsDesc: t("goodsDesc"),
+  trackDesc: t("trackDesc"),
+  refDesc: t("refDesc"),
+  infoDesc: t("infoDesc"),
+  servicesDesc: t("servicesDesc"),
+  companyName: t("companyName"),
+  headquarters: t("headquarters"),
+  accreditations: (t.raw("accreditations") as string[]) ?? [],
+  primaryPorts: (t.raw("primaryPorts") as string[]) ?? [],
+  coreServices: (t.raw("coreServices") as string[]) ?? [],
+  quoteMessage: t("quoteMessage"),
+  trackMessage: t("trackMessage"),
+};
+---
+
+<script is:inline define:vars={{ locale, baseUrl, i18nData }}>
+  (function initFeyzoWebMCP() {
+    const modelContext = window.modelContext || document.modelContext;
+    if (!modelContext || typeof modelContext.provideContext !== "function") return;
+
+    try {
+      modelContext.provideContext({
+        tools: [
+          // 1. أداة طلب عرض سعر شحن
+          {
+            name: "request_freight_quote",
+            description: i18nData.quoteDesc,
+            inputSchema: {
+              type: "object",
+              properties: {
+                originPort: { type: "string", description: i18nData.originDesc },
+                destinationPort: { type: "string", description: i18nData.destDesc },
+                cargoType: {
+                  type: "string",
+                  enum: [
+                    "fcl_20gp",
+                    "fcl_40hc",
+                    "reefer",
+                    "break_bulk",
+                    "lcl_consolidated",
+                    "customs_clearance",
+                  ],
+                  description: i18nData.cargoDesc,
+                },
+                commodityDescription: {
+                  type: "string",
+                  description: i18nData.goodsDesc,
+                },
+              },
+              required: ["originPort", "destinationPort", "cargoType"],
+            },
+            execute: async (args) => {
+              const params = new URLSearchParams(args).toString();
+              const message = i18nData.quoteMessage
+                .replace("{cargoType}", args.cargoType || "")
+                .replace("{originPort}", args.originPort || "")
+                .replace("{destinationPort}", args.destinationPort || "");
+
+              return {
+                status: "quote_prepared",
+                redirectUrl: `${baseUrl}/${locale}/contact?${params}`,
+                message: message,
+              };
+            },
+          },
+
+          // 2. أداة تتبع الشحنات
+          {
+            name: "track_shipment_status",
+            description: i18nData.trackDesc,
+            inputSchema: {
+              type: "object",
+              properties: {
+                referenceNumber: {
+                  type: "string",
+                  description: i18nData.refDesc,
+                },
+              },
+              required: ["referenceNumber"],
+            },
+            execute: async ({ referenceNumber }) => {
+              const cleanRef = referenceNumber.trim();
+              const message = i18nData.trackMessage.replace("{ref}", cleanRef);
+
+              return {
+                reference: cleanRef,
+                trackingUrl: `${baseUrl}/${locale}/tracking?ref=${encodeURIComponent(cleanRef)}`,
+                message: message,
+              };
+            },
+          },
+
+          // 3. أداة جلب معلومات الشركة والاعتمادات
+          {
+            name: "get_company_info",
+            description: i18nData.infoDesc,
+            inputSchema: { type: "object", properties: {} },
+            execute: async () => {
+              return {
+                companyName: i18nData.companyName,
+                headquarters: i18nData.headquarters,
+                accreditations: i18nData.accreditations,
+                primaryPorts: i18nData.primaryPorts,
+                officialContact: "info@feyzologistics.com",
+              };
+            },
+          },
+
+          // 4. أداة جلب الخدمات اللوجستية
+          {
+            name: "get_company_services",
+            description: i18nData.servicesDesc,
+            inputSchema: { type: "object", properties: {} },
+            execute: async () => {
+              return {
+                companyName: i18nData.companyName,
+                services: i18nData.coreServices,
+              };
+            },
+          },
+        ],
+      });
+    } catch (err) {
+      console.warn("WebMCP registration issue:", err);
+    }
+  })();
+</script>

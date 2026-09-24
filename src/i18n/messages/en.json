@@ -17,6 +17,36 @@
       "addressCountry": "SY"
     }
   },
+  "WebMcp": {
+    "quoteDesc": "Request a freight shipping quote for Ocean (FCL/LCL), Breakbulk, Reefer, or Customs Clearance to Syrian ports.",
+    "originDesc": "Origin port or city (e.g., Shanghai, Tianjin, Ningbo, Hamburg).",
+    "destDesc": "Destination port or city (e.g., Latakia, Tartous, Damascus, Homs).",
+    "cargoDesc": "Type of cargo or container service required.",
+    "goodsDesc": "Brief description of the goods (e.g., PVC profiles, galvanized coils).",
+    "trackDesc": "Track shipment progress, ETA, and clearance status using Container ID, Bill of Lading (B/L), or Booking Reference.",
+    "refDesc": "Container number, B/L ID, or booking reference.",
+    "infoDesc": "Retrieve official company information, headquarters, contact details, and certifications for Feyzo Logistics.",
+    "servicesDesc": "Retrieve the full list of available freight forwarding, ocean shipping, and customs clearance services.",
+    "companyName": "Feyzo Logistics",
+    "headquarters": "Latakia, Syria",
+    "accreditations": [
+      "FIATA Corporate Member",
+      "SIFFA Member"
+    ],
+    "primaryPorts": [
+      "Latakia Port",
+      "Tartous Port"
+    ],
+    "coreServices": [
+      "International Ocean Freight (FCL / LCL)",
+      "Breakbulk & Heavy Cargo Transport",
+      "Reefer Container Shipping",
+      "Customs Clearance & Transit Services",
+      "Inland Land Freight Transport"
+    ],
+    "quoteMessage": "Freight quote request initiated for {cargoType} from {originPort} to {destinationPort}.",
+    "trackMessage": "You can track shipment {ref} using the provided link."
+  },
   "Navbar": {
     "services": "Services",
     "about": "About",
