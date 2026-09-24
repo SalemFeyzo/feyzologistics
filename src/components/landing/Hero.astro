@@ -19,16 +19,22 @@ const t = useTranslations(locale, "Hero");
     src="/background.webp"
     alt={t("heroImageAlt")}
     class="absolute inset-0 h-full w-full object-cover object-center"
-    width={1680}
-    height={640}
+    width={1920}
+    height={1080}
+    widths={[640, 960, 1280, 1920]}
+    sizes="100vw"
+    format="avif"
+    quality={45}
     loading="eager"
     fetchpriority="high"
-    quality={65}
+    decoding="async"
   />
+
   <div
     class="pointer-events-none absolute inset-0 bg-background/65 dark:bg-background/70"
     aria-hidden="true"
-  />
+  ></div>
+
   <div class="container relative z-10 mx-auto max-w-6xl">
     <h1
       id="hero-heading"

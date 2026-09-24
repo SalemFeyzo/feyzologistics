@@ -1,0 +1,174 @@
+repo: https://github.com/SalemFeyzo/feyzologistics
+branch: main
+.
+├── AGENTS.md
+├── astro.config.mjs
+├── CLAUDE.md
+├── package.json
+├── pnpm-lock.yaml
+├── pnpm-workspace.yaml
+├── public
+│   ├── 06378fe41f3b45c48de94b823bcd85cb.txt
+│   ├── apple-touch-icon.png
+│   ├── background.png
+│   ├── background.webp
+│   ├── favicon-96x96.png
+│   ├── favicon-dark.ico
+│   ├── favicon.ico
+│   ├── favicon-light.ico
+│   ├── favicon.svg
+│   ├── logo
+│   │   ├── logo-dark-ar.png
+│   │   ├── logo-dark-en.png
+│   │   ├── logo-light-ar.png
+│   │   └── logo-light-en.png
+│   ├── logo-ar.svg
+│   ├── logo-bottom-ar.svg
+│   ├── logo-bottom-en.svg
+│   ├── logo-en.svg
+│   ├── logo-fiata.png
+│   ├── logo.png
+│   ├── logo-siffa.png
+│   ├── manifest.ar.json
+│   ├── manifest.en.json
+│   ├── og-ar.png
+│   ├── og-en.png
+│   ├── screenshots
+│   │   ├── desktop-ar.png
+│   │   ├── desktop-en.png
+│   │   ├── mobile-ar.png
+│   │   └── mobile-en.png
+│   ├── web-app-manifest-192x192.png
+│   └── web-app-manifest-512x512.png
+├── README.md
+├── scripts
+│   ├── fonts
+│   │   ├── Tajawal-Bold.ttf
+│   │   └── Tajawal-Regular.ttf
+│   ├── generate-og-images.mjs
+│   └── ping-indexnow.mjs
+├── src
+│   ├── components
+│   │   ├── landing
+│   │   │   ├── About.astro
+│   │   │   ├── Accreditations.astro
+│   │   │   ├── Contact.astro
+│   │   │   ├── Footer.astro
+│   │   │   ├── Hero.astro
+│   │   │   ├── Navbar.astro
+│   │   │   ├── Services.astro
+│   │   │   └── Trust.astro
+│   │   ├── seo
+│   │   │   ├── JsonLd.astro
+│   │   │   └── WebMcp.astro
+│   │   ├── SocialMediaLinks.astro
+│   │   ├── ThemeToggle.astro
+│   │   └── ui
+│   │       └── Button.astro
+│   ├── env.d.ts
+│   ├── i18n
+│   │   ├── index.ts
+│   │   └── messages
+│   │       ├── ar.json
+│   │       └── en.json
+│   ├── layouts
+│   │   └── BaseLayout.astro
+│   ├── lib
+│   │   ├── contact-details.ts
+│   │   ├── google-maps-embed.ts
+│   │   ├── locale-inline-script.ts
+│   │   ├── site.ts
+│   │   ├── theme-inline-script.ts
+│   │   └── utils.ts
+│   ├── pages
+│   │   ├── 404.astro
+│   │   ├── index.astro
+│   │   └── [locale]
+│   │       ├── 404.astro
+│   │       └── index.astro
+│   └── styles
+│       └── global.css
+├── tree.txt
+└── tsconfig.json
+823bcd85cb.txt
+│   ├── apple-touch-icon.png
+│   ├── background.png
+│   ├── background.webp
+│   ├── favicon-96x96.png
+│   ├── favicon-dark.ico
+│   ├── favicon.ico
+│   ├── favicon-light.ico
+│   ├── favicon.svg
+│   ├── logo
+│   │   ├── logo-dark-ar.png
+│   │   ├── logo-dark-en.png
+│   │   ├── logo-light-ar.png
+│   │   └── logo-light-en.png
+│   ├── logo-ar.svg
+│   ├── logo-bottom-ar.svg
+│   ├── logo-bottom-en.svg
+│   ├── logo-en.svg
+│   ├── logo-fiata.png
+│   ├── logo.png
+│   ├── logo-siffa.png
+│   ├── manifest.ar.json
+│   ├── manifest.en.json
+│   ├── og-ar.png
+│   ├── og-en.png
+│   ├── screenshots
+│   │   ├── desktop-ar.png
+│   │   ├── desktop-en.png
+│   │   ├── mobile-ar.png
+│   │   └── mobile-en.png
+│   ├── web-app-manifest-192x192.png
+│   └── web-app-manifest-512x512.png
+├── README.md
+├── scripts
+│   ├── fonts
+│   │   ├── Tajawal-Bold.ttf
+│   │   └── Tajawal-Regular.ttf
+│   ├── generate-og-images.mjs
+│   └── ping-indexnow.mjs
+├── src
+│   ├── components
+│   │   ├── landing
+│   │   │   ├── About.astro
+│   │   │   ├── Accreditations.astro
+│   │   │   ├── Contact.astro
+│   │   │   ├── Footer.astro
+│   │   │   ├── Hero.astro
+│   │   │   ├── Navbar.astro
+│   │   │   ├── Services.astro
+│   │   │   └── Trust.astro
+│   │   ├── seo
+│   │   │   ├── JsonLd.astro
+│   │   │   └── WebMcp.astro
+│   │   ├── SocialMediaLinks.astro
+│   │   ├── ThemeToggle.astro
+│   │   └── ui
+│   │       └── Button.astro
+│   ├── env.d.ts
+│   ├── i18n
+│   │   ├── index.ts
+│   │   └── messages
+│   │       ├── ar.json
+│   │       └── en.json
+│   ├── layouts
+│   │   └── BaseLayout.astro
+│   ├── lib
+│   │   ├── contact-details.ts
+│   │   ├── google-maps-embed.ts
+│   │   ├── locale-inline-script.ts
+│   │   ├── site.ts
+│   │   ├── theme-inline-script.ts
+│   │   └── utils.ts
+│   ├── pages
+│   │   ├── 404.astro
+│   │   ├── index.astro
+│   │   └── [locale]
+│   │       ├── 404.astro
+│   │       └── index.astro
+│   └── styles
+│       └── global.css
+├── tree.txt
+└── tsconfig.json
