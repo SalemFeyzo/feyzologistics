@@ -1,6 +1,7 @@
 ---
 import { useTranslations, type AppLocale } from "@/i18n";
 import { getBaseUrl } from "@/lib/site";
+import { getContactEmail } from "@/lib/contact-details";
 
 interface Props {
   locale: AppLocale;
@@ -9,6 +10,7 @@ interface Props {
 const { locale } = Astro.props;
 const t = useTranslations(locale, "WebMcp");
 const baseUrl = getBaseUrl();
+const contactEmail = getContactEmail();
 
 const i18nData = {
   quoteDesc: t("quoteDesc"),
@@ -27,6 +29,7 @@ const i18nData = {
   coreServices: (t.raw("coreServices") as string[]) ?? [],
   quoteMessage: t("quoteMessage"),
   trackMessage: t("trackMessage"),
+  contactEmail,
 };
 ---
 
@@ -114,7 +117,7 @@ const i18nData = {
             headquarters: i18nData.headquarters,
             accreditations: i18nData.accreditations,
             primaryPorts: i18nData.primaryPorts,
-            officialContact: "info@feyzologistics.com",
+            officialContact: i18nData.contactEmail,
           };
         },
       },
@@ -133,7 +136,7 @@ const i18nData = {
       },
     ];
 
-    // 1. تصدير الأدوات لكائن العام للاختبار في الكونسول بأي وقت
+    // 1. تصدير الأدوات للكائن العام للاختبار في الكونسول بأي وقت
     window.__FEYZO_WEBMCP_TOOLS__ = tools;
 
     // 2. تسجيل الأدوات لمُحرك WebMCP إذا كان متوفراً في المتصفح
