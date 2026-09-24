@@ -11,6 +11,10 @@ const { locale } = Astro.props;
 const t = useTranslations(locale, "WebMcp");
 const baseUrl = getBaseUrl();
 const contactEmail = getContactEmail();
+const isDev = import.meta.env.DEV;
+
+// دالة حماية لضمان تحويل القيم المرجعة إلى مصفوفات دائماً
+const safeArray = (val: unknown): string[] => (Array.isArray(val) ? val : []);
 
 const i18nData = {
   quoteDesc: t("quoteDesc"),
@@ -24,129 +28,231 @@ const i18nData = {
   servicesDesc: t("servicesDesc"),
   companyName: t("companyName"),
   headquarters: t("headquarters"),
-  accreditations: (t.raw("accreditations") as string[]) ?? [],
-  primaryPorts: (t.raw("primaryPorts") as string[]) ?? [],
-  coreServices: (t.raw("coreServices") as string[]) ?? [],
+  accreditations: safeArray(t.raw("accreditations")),
+  primaryPorts: safeArray(t.raw("primaryPorts")),
+  coreServices: safeArray(t.raw("coreServices")),
   quoteMessage: t("quoteMessage"),
   trackMessage: t("trackMessage"),
   contactEmail,
 };
 ---
 
-<script is:inline define:vars={{ locale, baseUrl, i18nData }}>
-  (function initFeyzoWebMCP() {
-    // تعريف قائمة الأدوات
-    const tools = [
-      // 1. أداة طلب عرض سعر شحن
-      {
-        name: "request_freight_quote",
-        description: i18nData.quoteDesc,
-        inputSchema: {
-          type: "object",
-          properties: {
-            originPort: { type: "string", description: i18nData.originDesc },
-            destinationPort: { type: "string", description: i18nData.destDesc },
-            cargoType: {
-              type: "string",
-              enum: [
-                "fcl_20gp",
-                "fcl_40hc",
-                "reefer",
-                "break_bulk",
-                "lcl_consolidated",
-                "customs_clearance",
-              ],
-              description: i18nData.cargoDesc,
-            },
-            commodityDescription: {
-              type: "string",
-              description: i18nData.goodsDesc,
-            },
-          },
-          required: ["originPort", "destinationPort", "cargoType"],
-        },
-        execute: async (args) => {
-          const params = new URLSearchParams(args).toString();
-          const message = i18nData.quoteMessage
-            .replace("{cargoType}", args.cargoType || "")
-            .replace("{originPort}", args.originPort || "")
-            .replace("{destinationPort}", args.destinationPort || "");
-
-          return {
-            status: "quote_prepared",
-            redirectUrl: `${baseUrl}/${locale}/contact?${params}`,
-            message: message,
-          };
-        },
-      },
-
-      // 2. أداة تتبع الشحنات
-      {
-        name: "track_shipment_status",
-        description: i18nData.trackDesc,
-        inputSchema: {
-          type: "object",
-          properties: {
-            referenceNumber: {
-              type: "string",
-              description: i18nData.refDesc,
-            },
-          },
-          required: ["referenceNumber"],
-        },
-        execute: async ({ referenceNumber }) => {
-          const cleanRef = (referenceNumber || "").trim();
-          const message = i18nData.trackMessage.replace("{ref}", cleanRef);
-
-          return {
-            reference: cleanRef,
-            trackingUrl: `${baseUrl}/${locale}/tracking?ref=${encodeURIComponent(cleanRef)}`,
-            message: message,
-          };
-        },
-      },
-
-      // 3. أداة معلومات الشركة
-      {
-        name: "get_company_info",
-        description: i18nData.infoDesc,
-        inputSchema: { type: "object", properties: {} },
-        execute: async () => {
-          return {
-            companyName: i18nData.companyName,
-            headquarters: i18nData.headquarters,
-            accreditations: i18nData.accreditations,
-            primaryPorts: i18nData.primaryPorts,
-            officialContact: i18nData.contactEmail,
-          };
-        },
-      },
-
-      // 4. أداة خدمات الشركة
-      {
-        name: "get_company_services",
-        description: i18nData.servicesDesc,
-        inputSchema: { type: "object", properties: {} },
-        execute: async () => {
-          return {
-            companyName: i18nData.companyName,
-            services: i18nData.coreServices,
-          };
-        },
-      },
+<script is:inline define:vars={{ locale, baseUrl, i18nData, isDev }}>
+  (function setupWebMcp() {
+    const validCargoTypes = [
+      "fcl_20gp",
+      "fcl_40hc",
+      "reefer",
+      "break_bulk",
+      "lcl_consolidated",
+      "customs_clearance",
     ];
 
-    // 1. تصدير الأدوات للكائن العام للاختبار في الكونسول بأي وقت
-    window.__FEYZO_WEBMCP_TOOLS__ = tools;
+    let isExecuting = false;
 
-    // 2. تسجيل الأدوات لمُحرك WebMCP إذا كان متوفراً في المتصفح
-    const modelContext = window.modelContext || document.modelContext;
-    if (modelContext && typeof modelContext.provideContext === "function") {
+    async function registerFeyzoTools() {
+      if (isExecuting) return;
+      isExecuting = true;
+
       try {
-        modelContext.provideContext({ tools });
+        const tools = [
+          // 1. أداة طلب عرض سعر شحن
+          {
+            name: "request_freight_quote",
+            title: i18nData.companyName + " - Freight Quote",
+            description: i18nData.quoteDesc,
+            annotations: {
+              readOnlyHint: false,
+              idempotentHint: false,
+            },
+            inputSchema: {
+              type: "object",
+              properties: {
+                originPort: { type: "string", description: i18nData.originDesc },
+                destinationPort: { type: "string", description: i18nData.destDesc },
+                cargoType: {
+                  type: "string",
+                  enum: validCargoTypes,
+                  description: i18nData.cargoDesc,
+                },
+                commodityDescription: {
+                  type: "string",
+                  description: i18nData.goodsDesc,
+                },
+              },
+              required: ["originPort", "destinationPort", "cargoType"],
+            },
+            outputSchema: {
+              type: "object",
+              properties: {
+                status: { type: "string" },
+                redirectUrl: { type: "string" },
+                message: { type: "string" },
+              },
+            },
+            execute: async (args) => {
+              if (!args || typeof args !== "object") {
+                return { status: "error", message: "Invalid parameters provided." };
+              }
+
+              if (args.cargoType && !validCargoTypes.includes(args.cargoType)) {
+                return { status: "error", message: "Invalid cargo type specified." };
+              }
+
+              const cleanEntries = Object.entries(args).filter(
+                ([, value]) => value !== undefined && value !== null && value !== ""
+              );
+              const params = new URLSearchParams(cleanEntries).toString();
+
+              const message = i18nData.quoteMessage
+                .replace("{cargoType}", args.cargoType || "")
+                .replace("{originPort}", args.originPort || "")
+                .replace("{destinationPort}", args.destinationPort || "");
+
+              return {
+                status: "quote_prepared",
+                redirectUrl: `${baseUrl}/${locale}/contact?${params}`,
+                message,
+              };
+            },
+          },
+
+          // 2. أداة تتبع الشحنات
+          {
+            name: "track_shipment_status",
+            title: i18nData.companyName + " - Track Shipment",
+            description: i18nData.trackDesc,
+            annotations: {
+              readOnlyHint: true,
+              idempotentHint: true,
+            },
+            inputSchema: {
+              type: "object",
+              properties: {
+                referenceNumber: {
+                  type: "string",
+                  description: i18nData.refDesc,
+                },
+              },
+              required: ["referenceNumber"],
+            },
+            outputSchema: {
+              type: "object",
+              properties: {
+                status: { type: "string" },
+                reference: { type: "string" },
+                trackingUrl: { type: "string" },
+                message: { type: "string" },
+              },
+            },
+            execute: async ({ referenceNumber } = {}) => {
+              const cleanRef = (referenceNumber || "").trim();
+              if (!cleanRef) {
+                return { status: "error", message: "Reference number is required." };
+              }
+
+              const message = i18nData.trackMessage.replace("{ref}", cleanRef);
+
+              return {
+                status: "success",
+                reference: cleanRef,
+                trackingUrl: `${baseUrl}/${locale}/tracking?ref=${encodeURIComponent(cleanRef)}`,
+                message,
+              };
+            },
+          },
+
+          // 3. أداة معلومات الشركة
+          {
+            name: "get_company_info",
+            title: i18nData.companyName + " - Info",
+            description: i18nData.infoDesc,
+            annotations: {
+              readOnlyHint: true,
+              idempotentHint: true,
+            },
+            inputSchema: { type: "object", properties: {} },
+            outputSchema: {
+              type: "object",
+              properties: {
+                status: { type: "string" },
+                companyName: { type: "string" },
+                headquarters: { type: "string" },
+                accreditations: { type: "array", items: { type: "string" } },
+                primaryPorts: { type: "array", items: { type: "string" } },
+                officialContact: { type: "string" },
+              },
+            },
+            execute: async () => {
+              return {
+                status: "success",
+                companyName: i18nData.companyName,
+                headquarters: i18nData.headquarters,
+                accreditations: i18nData.accreditations,
+                primaryPorts: i18nData.primaryPorts,
+                officialContact: i18nData.contactEmail,
+              };
+            },
+          },
+
+          // 4. أداة خدمات الشركة
+          {
+            name: "get_company_services",
+            title: i18nData.companyName + " - Services",
+            description: i18nData.servicesDesc,
+            annotations: {
+              readOnlyHint: true,
+              idempotentHint: true,
+            },
+            inputSchema: { type: "object", properties: {} },
+            outputSchema: {
+              type: "object",
+              properties: {
+                status: { type: "string" },
+                companyName: { type: "string" },
+                services: { type: "array", items: { type: "string" } },
+              },
+            },
+            execute: async () => {
+              return {
+                status: "success",
+                companyName: i18nData.companyName,
+                services: i18nData.coreServices,
+              };
+            },
+          },
+        ];
+
+        window.__FEYZO_WEBMCP_TOOLS__ = tools;
+
+        const modelContext =
+          (typeof navigator !== "undefined" && navigator.modelContext) ||
+          (typeof window !== "undefined" && window.modelContext) ||
+          null;
+
+        if (modelContext && typeof modelContext.provideContext === "function") {
+          if (typeof modelContext.clearContext === "function") {
+            await modelContext.clearContext();
+          }
+          await modelContext.provideContext({ tools });
+        }
       } catch (err) {
-        console.warn("WebMCP registration issue:", err);
+        if (isDev) {
+          console.warn("WebMCP registration issue:", err);
+        }
+      } finally {
+        isExecuting = false;
       }
+    }
+
+    // 1. دعم التنقل مع Astro View Transitions
+    document.addEventListener("astro:page-load", registerFeyzoTools);
+
+    // 2. احتياطي للصفحات التي لا تستخدم ClientRouter
+    if (document.readyState === "loading") {
+      document.addEventListener("DOMContentLoaded", registerFeyzoTools, { once: true });
+    } else {
+      registerFeyzoTools();
     }
   })();
 </script>
