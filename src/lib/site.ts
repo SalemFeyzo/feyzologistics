@@ -15,7 +15,7 @@ export function getSocialProfileUrls(): string[] {
     import.meta.env.PUBLIC_SOCIAL_FACEBOOK_URL ??
       `https://www.facebook.com/${SOCIAL_HANDLE}`,
     import.meta.env.PUBLIC_SOCIAL_INSTAGRAM_URL ??
-      `https://www.instagram.com/${SOCIAL_HANDLE}/`,
+      `https://www.instagram.com/${SOCIAL_HANDLE}`,
     import.meta.env.PUBLIC_SOCIAL_THREADS_URL ??
       `https://www.threads.net/@${SOCIAL_HANDLE}`,
   ];
