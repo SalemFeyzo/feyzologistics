@@ -37,13 +37,13 @@ const serviceItems = rawServiceItems.filter(
   (item) => item?.title && item?.description
 );
 
-// العنوان البريدي
+// العنوان البريدي — addressCountry بصيغة ISO 3166-1 alpha-2
 const postalAddress = {
   "@type": "PostalAddress",
   streetAddress: t("address.streetAddress"),
   addressLocality: t("address.addressLocality"),
   addressRegion: t("address.addressRegion"),
-  addressCountry: t("address.addressCountry"),
+  addressCountry: "SY",
 };
 
 // الإحداثيات الجغرافية لمقر الشركة في اللاذقية (قيم رقمية قياسية)
@@ -80,7 +80,7 @@ const hasOfferCatalog = {
   })),
 };
 
-// الجمعية السورية للشحن الدولي SIFFA (تنسيق مصفوفة موحد حسب اللغة)
+// الجمعية السورية للشحن الدولي SIFFA (مع علاقة عضو عكسية)
 const siffaOrganization = {
   "@id": siffaOrgId,
   "@type": "Organization",
@@ -93,9 +93,10 @@ const siffaOrganization = {
       ? ["SIFFA", "الجمعية السورية لوكلاء الشحن الدولي"]
       : ["SIFFA"],
   url: SIFFA_WEBSITE_URL,
+  member: [{ "@id": businessId }],
 };
 
-// الاتحاد الدولي لوكلاء الشحن FIATA (تنسيق مصفوفة موحد حسب اللغة)
+// الاتحاد الدولي لوكلاء الشحن FIATA (مع علاقة عضو عكسية)
 const fiataOrganization = {
   "@id": fiataOrgId,
   "@type": "Organization",
@@ -105,6 +106,7 @@ const fiataOrganization = {
       ? ["FIATA", "الاتحاد الدولي لجمعيات الشحن والخدمات اللوجستية"]
       : ["FIATA"],
   url: FIATA_WEBSITE_URL,
+  member: [{ "@id": businessId }],
 };
 
 // وسوم النطاق المعرفي (knowsAbout) لتعريف الذكاء الاصطناعي بمجالات عمل الشركة
@@ -138,7 +140,13 @@ const organizationAndLocalBusiness = {
   "@id": businessId,
   "@type": ["Organization", "LocalBusiness"],
   name: businessName,
+  legalName: "Feyzo Logistics",
   alternateName,
+  identifier: {
+    "@type": "PropertyValue",
+    propertyID: "domain",
+    value: "feyzologistics.com",
+  },
   knowsLanguage: ["ar", "en"],
   url: baseUrl,
   image: [ogImageUrl, logoUrl],
@@ -171,7 +179,7 @@ const organizationAndLocalBusiness = {
     {
       "@type": "ContactPoint",
       telephone: contactTelephone,
-      email: `mailto:${contactEmail}`,
+      email: contactEmail,
       contactType: "customer service",
       description: locale === "ar" ? "خدمة العملاء" : "Customer service",
       areaServed: {
