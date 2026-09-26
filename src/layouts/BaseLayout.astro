@@ -5,7 +5,6 @@ import WebMcp from "@/components/seo/WebMcp.astro";
 import CookieConsent from "@/components/CookieConsent.astro";
 import { defaultLocale, locales, useTranslations, type AppLocale } from "@/i18n";
 import { getBaseUrl } from "@/lib/site";
-import { LOCALE_REDIRECT_SCRIPT } from "@/lib/locale-inline-script";
 import { THEME_INIT_SCRIPT } from "@/lib/theme-inline-script";
 import { getFontPreloads } from "@/lib/font-preload";
 
@@ -171,7 +170,6 @@ const twitterHandle = "@feyzo_logistics";
     )}
 
     <!-- ═══ Core Inline Scripts ═══ -->
-    <script is:inline set:html={LOCALE_REDIRECT_SCRIPT} />
     <script is:inline set:html={THEME_INIT_SCRIPT} />
 
     <!-- ═══ Structured Data ═══ -->

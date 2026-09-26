@@ -1,14 +1,20 @@
 ---
 import { LOCALE_REDIRECT_SCRIPT } from "@/lib/locale-inline-script";
+import { defaultLocale } from "@/i18n";
+
+const defaultPath = `/${defaultLocale}`;
 ---
 
 <!doctype html>
-<html lang="en" dir="ltr">
+<html lang={defaultLocale} dir={defaultLocale === "ar" ? "rtl" : "ltr"}>
   <head>
     <meta charset="utf-8" />
+     <meta name="robots" content="noindex, follow" />
     <script is:inline set:html={LOCALE_REDIRECT_SCRIPT}></script>
-    <noscript><meta http-equiv="refresh" content="0; url=/en" /></noscript>
-    <link rel="canonical" href="/en" />
+    <noscript>
+      <meta http-equiv="refresh" content={`0; url=${defaultPath}`} />
+    </noscript>
+    
     <title>Feyzo Logistics</title>
   </head>
   <body></body>
