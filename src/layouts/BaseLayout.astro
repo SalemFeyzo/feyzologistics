@@ -4,7 +4,7 @@ import JsonLd from "@/components/seo/JsonLd.astro";
 import WebMcp from "@/components/seo/WebMcp.astro";
 import CookieConsent from "@/components/CookieConsent.astro";
 import { defaultLocale, locales, useTranslations, type AppLocale } from "@/i18n";
-import { getBaseUrl } from "@/lib/site";
+import { getBaseUrl, SOCIAL_HANDLE } from "@/lib/site";
 import { THEME_INIT_SCRIPT } from "@/lib/theme-inline-script";
 import { getFontPreloads } from "@/lib/font-preload";
 
@@ -77,7 +77,7 @@ const fontPreloads = getFontPreloads(locale);
 const gaId = import.meta.env.PUBLIC_GA_MEASUREMENT_ID?.trim() || null;
 const GA_FALLBACK_DELAY_MS = 8000;
 
-const twitterHandle = "@feyzo_logistics";
+const twitterHandle = `@${SOCIAL_HANDLE}`;
 ---
 
 <!doctype html>
