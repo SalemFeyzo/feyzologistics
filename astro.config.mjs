@@ -15,7 +15,7 @@ const SITE = (
   'https://www.feyzologistics.com'
 ).replace(/\/$/, '');
 
-const DEFAULT_LOCALE = 'ar';
+const DEFAULT_LOCALE = 'en';
 const LOCALES = ['ar', 'en'];
 
 // ═══════════════════════════════════════════════════════════
