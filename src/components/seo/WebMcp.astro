@@ -13,7 +13,6 @@ const baseUrl = getBaseUrl();
 const contactEmail = getContactEmail();
 const isDev = import.meta.env.DEV;
 
-// دالة حماية لضمان تحويل القيم المرجعة إلى مصفوفات دائماً
 const safeArray = (val: unknown): string[] => (Array.isArray(val) ? val : []);
 
 const i18nData = {
@@ -225,12 +224,34 @@ const i18nData = {
 
         window.__FEYZO_WEBMCP_TOOLS__ = tools;
 
+        // ✅ document.modelContext هو Canonical (Chrome 150+)
+        //    navigator.modelContext هو deprecated fallback (Chrome 146–149)
         const modelContext =
+          (typeof document !== "undefined" && document.modelContext) ||
           (typeof navigator !== "undefined" && navigator.modelContext) ||
-          (typeof window !== "undefined" && window.modelContext) ||
           null;
 
-        if (modelContext && typeof modelContext.provideContext === "function") {
+        if (!modelContext) return;
+
+        // ✅ النموذج الجديد (Chrome 147+): registerTool إضافي وآمن
+        if (typeof modelContext.registerTool === "function") {
+          // إلغاء تسجيل الأدوات السابقة لمنع "Duplicate tool name"
+          if (typeof modelContext.unregisterTool === "function") {
+            for (const tool of tools) {
+              try {
+                modelContext.unregisterTool(tool.name);
+              } catch {
+                // الأداة غير مسجلة — تجاهل الخطأ
+              }
+            }
+          }
+
+          for (const tool of tools) {
+            await modelContext.registerTool(tool);
+          }
+        }
+        // ⚠️ Fallback للتوافق مع Chrome 146 (سيُزال قريباً)
+        else if (typeof modelContext.provideContext === "function") {
           if (typeof modelContext.clearContext === "function") {
             await modelContext.clearContext();
           }
