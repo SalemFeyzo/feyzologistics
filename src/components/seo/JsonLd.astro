@@ -147,6 +147,7 @@ const organizationAndLocalBusiness = {
     propertyID: "domain",
     value: "feyzologistics.com",
   },
+  foundingDate: "2026",
   knowsLanguage: ["ar", "en"],
   url: baseUrl,
   image: [ogImageUrl, logoUrl],
@@ -159,6 +160,19 @@ const organizationAndLocalBusiness = {
   priceRange: "$$",
   sameAs,
   memberOf: [{ "@id": siffaOrgId }, { "@id": fiataOrgId }],
+  subjectOf: [
+    {
+      "@type": "DigitalDocument",
+      name:
+        locale === "ar"
+          ? "شهادة عضوية FIATA"
+          : "FIATA Membership Certificate",
+      url: `${baseUrl}/fiata-membership-certificate.pdf`,
+      contentUrl: `${baseUrl}/fiata-membership-certificate.pdf`,
+      encodingFormat: "application/pdf",
+      about: { "@id": fiataOrgId },
+    },
+  ],
   hasOfferCatalog,
   knowsAbout,
   areaServed: [
