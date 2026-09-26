@@ -40,6 +40,11 @@ export default defineConfig({
     locales: LOCALES,
     routing: {
       prefixDefaultLocale: true,
+      // ⚠️ Fix: prevents Astro from auto-redirecting `/` → `/ar`,
+      // which caused Bing to see `/ar` as a redirect and refuse
+      // to index it. Client-side redirect is handled by
+      // LOCALE_REDIRECT_SCRIPT in BaseLayout.astro.
+      redirectToDefaultLocale: false,
     },
   },
 
