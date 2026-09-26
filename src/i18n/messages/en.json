@@ -141,6 +141,7 @@
     "navServices": "Services",
     "navAbout": "About",
     "navContact": "Contact",
+    "navPrivacy": "Privacy Policy",
     "social": {
       "label": "Social media",
       "x": "Feyzo on X",
@@ -155,5 +156,161 @@
     "acceptAll": "Accept all",
     "rejectAll": "Reject non-essential",
     "ariaLabel": "Cookie consent"
+  },
+  "PrivacyPolicy": {
+    "title": "Privacy Policy",
+    "subtitle": "We are committed to protecting your personal data. This policy explains how we collect, use, store, and protect your information.",
+    "lastUpdated": "Last updated: September 26, 2026",
+    "tocTitle": "Contents",
+    "sections": [
+      {
+        "id": "introduction",
+        "title": "Introduction",
+        "paragraphs": [
+          "Welcome to Feyzo Logistics. We take your privacy seriously and are committed to protecting your personal data.",
+          "This Privacy Policy explains how we collect, use, store, and protect your information when you visit our website or use our services."
+        ]
+      },
+      {
+        "id": "data-controller",
+        "title": "Data Controller",
+        "paragraphs": [
+          "The entity responsible for processing your personal data under this policy is:",
+          "Feyzo Logistics\nLatakia, Syrian Arab Republic"
+        ],
+        "contact": true
+      },
+      {
+        "id": "data-we-collect",
+        "title": "Data We Collect",
+        "paragraphs": [
+          "We collect the following types of data:"
+        ],
+        "list": [
+          "Identity data: full name, company name, job title",
+          "Contact data: email address, phone number, postal address",
+          "Shipment data: cargo details, ports, customs documents",
+          "Usage data: IP address, browser type, pages you visit and duration"
+        ]
+      },
+      {
+        "id": "how-we-use",
+        "title": "How We Use Your Data",
+        "paragraphs": [
+          "We use your data only for the following purposes:"
+        ],
+        "list": [
+          "Providing the freight forwarding and customs clearance services you requested",
+          "Responding to your inquiries and preparing quotes",
+          "Improving our website and services based on usage patterns",
+          "Complying with legal and regulatory obligations",
+          "Sending shipment updates (only upon your request)"
+        ]
+      },
+      {
+        "id": "legal-basis",
+        "title": "Legal Basis for Processing",
+        "paragraphs": [
+          "We process your data based on the following legal grounds:"
+        ],
+        "list": [
+          "Contract performance: to deliver the services you requested",
+          "Consent: when you explicitly agree (e.g., newsletter)",
+          "Legitimate interest: to improve our services and prevent fraud",
+          "Legal compliance: to fulfill regulatory obligations"
+        ]
+      },
+      {
+        "id": "cookies",
+        "title": "Cookies",
+        "paragraphs": [
+          "We use cookies to improve your experience and analyze traffic on our website. You can manage your preferences at any time via the consent banner shown on your first visit."
+        ],
+        "list": [
+          "Essential cookies: required for the website to function correctly and cannot be disabled",
+          "Analytics cookies: help us understand visitor behavior (e.g., Google Analytics)",
+          "Marketing cookies: used for personalized advertising (we do not currently use any)"
+        ]
+      },
+      {
+        "id": "third-parties",
+        "title": "Sharing Data with Third Parties",
+        "paragraphs": [
+          "We do not sell your personal data. We may share it only with:"
+        ],
+        "list": [
+          "Shipping and transport partners: to complete shipments",
+          "Customs authorities: to comply with customs regulations",
+          "Technical service providers: such as Google Analytics (only after your consent)",
+          "Legal authorities: upon formal request under applicable law"
+        ]
+      },
+      {
+        "id": "data-retention",
+        "title": "Data Retention",
+        "paragraphs": [
+          "We retain your data only for as long as necessary to fulfill the purposes above or as required by law:",
+          "Shipment data: 5–7 years (accounting and legal requirements)\nInquiry data: 2 years from last interaction\nAnalytics data: according to Google Analytics settings"
+        ]
+      },
+      {
+        "id": "your-rights",
+        "title": "Your Rights",
+        "paragraphs": [
+          "If you reside in the European Union, you have the following rights under GDPR:"
+        ],
+        "list": [
+          "Right of access: request a copy of your personal data",
+          "Right to rectification: correct inaccurate data",
+          "Right to erasure: request deletion of your data (\"right to be forgotten\")",
+          "Right to restrict processing: limit how we use your data",
+          "Right to data portability: receive your data in a machine-readable format",
+          "Right to object: object to the processing of your data",
+          "Right to withdraw consent: withdraw your consent at any time"
+        ],
+        "footer": "To exercise any of these rights, please contact us at the email below."
+      },
+      {
+        "id": "security",
+        "title": "Data Security",
+        "paragraphs": [
+          "We implement appropriate technical and organizational security measures to protect your data from unauthorized access, alteration, disclosure, or destruction, including encryption in transit and access controls.",
+          "However, no transmission of data over the Internet can be guaranteed to be 100% secure."
+        ]
+      },
+      {
+        "id": "international-transfers",
+        "title": "International Data Transfers",
+        "paragraphs": [
+          "Your data may be transferred to and processed in countries other than your country of residence. When we transfer data outside the European Economic Area, we use appropriate safeguards such as the Standard Contractual Clauses approved by the European Commission."
+        ]
+      },
+      {
+        "id": "children",
+        "title": "Children's Privacy",
+        "paragraphs": [
+          "Our services are not directed at children under 16. We do not knowingly collect personal data from children. If you discover that a child has provided us with personal data, please contact us to delete it promptly."
+        ]
+      },
+      {
+        "id": "changes",
+        "title": "Changes to This Policy",
+        "paragraphs": [
+          "We may update this Privacy Policy from time to time. We will notify you of any material changes via email or a prominent notice on our website.",
+          "We recommend reviewing this page periodically for the latest updates."
+        ]
+      },
+      {
+        "id": "contact",
+        "title": "Contact Us",
+        "paragraphs": [
+          "If you have any questions or concerns about this Privacy Policy or how we handle your data, you can reach us at:"
+        ],
+        "contact": true
+      }
+    ],
+    "contactSectionTitle": "Questions about your privacy?",
+    "contactSectionText": "Our team is ready to answer any questions about your personal data.",
+    "contactCta": "Contact Us"
   }
 }

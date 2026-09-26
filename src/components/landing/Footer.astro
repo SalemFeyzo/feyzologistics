@@ -35,6 +35,12 @@ const bottomLogo = locale === "ar" ? "/logo-bottom-ar.svg" : "/logo-bottom-en.sv
       <a href="#services" class="hover:text-foreground">{t("navServices")}</a>
       <a href="#about" class="hover:text-foreground">{t("navAbout")}</a>
       <a href="#contact" class="hover:text-foreground">{t("navContact")}</a>
+       <a
+        href={`/${locale}/privacy-policy`}
+        class="hover:text-foreground"
+      >
+        {t("navPrivacy")}
+      </a>
     </nav>
   </div>
   <div class="container mx-auto mt-10 max-w-6xl space-y-4 border-t border-border pt-6">
