@@ -2,6 +2,7 @@
 import "@/styles/global.css";
 import JsonLd from "@/components/seo/JsonLd.astro";
 import WebMcp from "@/components/seo/WebMcp.astro";
+import CookieConsent from "@/components/CookieConsent.astro";
 import { defaultLocale, locales, useTranslations, type AppLocale } from "@/i18n";
 import { getBaseUrl } from "@/lib/site";
 import { LOCALE_REDIRECT_SCRIPT } from "@/lib/locale-inline-script";
@@ -232,5 +233,6 @@ const twitterHandle = "@feyzo_logistics";
   </head>
   <body class="min-h-full flex flex-col bg-background text-foreground antialiased">
     <slot />
+     <CookieConsent locale={locale} />
   </body>
 </html>

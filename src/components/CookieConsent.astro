@@ -1,0 +1,162 @@
+---
+import { useTranslations, type AppLocale } from "@/i18n";
+
+interface Props {
+  locale: AppLocale;
+}
+
+const { locale } = Astro.props;
+const t = useTranslations(locale, "CookieConsent");
+
+const i18nData = {
+  bannerText: t("bannerText"),
+  acceptAll: t("acceptAll"),
+  rejectAll: t("rejectAll"),
+  ariaLabel: t("ariaLabel"),
+};
+---
+
+<!-- بانر الموافقة — مخفي افتراضياً بـ Tailwind class `hidden` -->
+<div
+  id="cookie-consent-banner"
+  class="hidden fixed inset-x-0 bottom-0 z-9999 border-t border-border bg-background p-4 text-foreground shadow-[0_-4px_12px_rgba(0,0,0,0.1)]"
+  role="dialog"
+  aria-live="polite"
+  aria-label={i18nData.ariaLabel}
+>
+  <div
+    class="mx-auto flex max-w-6xl flex-col items-center gap-4 text-center sm:flex-row sm:flex-wrap sm:justify-between sm:text-start"
+  >
+    <p class="m-0 min-w-62.5 flex-1 text-sm leading-relaxed">
+      {i18nData.bannerText}
+    </p>
+
+    <div class="flex w-full shrink-0 justify-center gap-3 sm:w-auto">
+      <!-- أزرار "قبول" و "رفض" بنفس الحجم والوزن البصري (مطلب GDPR) -->
+      <button
+        id="cookie-consent-accept"
+        type="button"
+        class="min-w-30 cursor-pointer rounded-lg border border-transparent bg-primary px-4 py-2 text-center text-sm font-medium text-primary-foreground transition-opacity hover:opacity-90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+      >
+        {i18nData.acceptAll}
+      </button>
+      <button
+        id="cookie-consent-reject"
+        type="button"
+        class="min-w-30 cursor-pointer rounded-lg border border-border bg-transparent px-4 py-2 text-center text-sm font-medium text-foreground transition-colors hover:bg-muted focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+      >
+        {i18nData.rejectAll}
+      </button>
+    </div>
+  </div>
+</div>
+
+<script is:inline define:vars={{ i18nData }}>
+  (function () {
+    const STORAGE_KEY = "feyzo-cookie-consent";
+    const CONSENT_VERSION = 1; // ارفع هذا الرقم عند تغيير الشروط لإعادة طلب الموافقة
+
+    const banner = document.getElementById("cookie-consent-banner");
+    const acceptBtn = document.getElementById("cookie-consent-accept");
+    const rejectBtn = document.getElementById("cookie-consent-reject");
+
+    if (!banner || !acceptBtn || !rejectBtn) return;
+
+    function getStoredConsent() {
+      try {
+        const stored = localStorage.getItem(STORAGE_KEY);
+        if (!stored) return null;
+        const parsed = JSON.parse(stored);
+        if (parsed.version !== CONSENT_VERSION) {
+          localStorage.removeItem(STORAGE_KEY);
+          return null;
+        }
+        return parsed;
+      } catch {
+        return null;
+      }
+    }
+
+    function saveConsent(consent) {
+      localStorage.setItem(
+        STORAGE_KEY,
+        JSON.stringify({
+          version: CONSENT_VERSION,
+          timestamp: Date.now(),
+          analytics: consent.analytics,
+          marketing: consent.marketing,
+        })
+      );
+    }
+
+    function updateGoogleConsent(consent) {
+      if (typeof window.gtag !== "function") return;
+      window.gtag("consent", "update", {
+        analytics_storage: consent.analytics ? "granted" : "denied",
+        ad_storage: consent.marketing ? "granted" : "denied",
+        ad_user_data: consent.marketing ? "granted" : "denied",
+        ad_personalization: consent.marketing ? "granted" : "denied",
+      });
+    }
+
+    function activateScripts(category) {
+      const scripts = document.querySelectorAll(
+        'script[type="text/plain"][data-cc-category="' + category + '"]'
+      );
+      scripts.forEach((old) => {
+        const fresh = document.createElement("script");
+        Array.from(old.attributes).forEach((attr) => {
+          if (attr.name !== "type") {
+            fresh.setAttribute(attr.name, attr.value);
+          }
+        });
+        fresh.setAttribute("type", "text/javascript");
+        if (old.innerHTML) fresh.innerHTML = old.innerHTML;
+        old.parentNode.replaceChild(fresh, old);
+      });
+    }
+
+    function show() {
+      banner.classList.remove("hidden");
+    }
+
+    function hide() {
+      banner.classList.add("hidden");
+    }
+
+    acceptBtn.addEventListener("click", () => {
+      const consent = { analytics: true, marketing: true };
+      saveConsent(consent);
+      updateGoogleConsent(consent);
+      activateScripts("analytics");
+      activateScripts("marketing");
+      hide();
+    });
+
+    rejectBtn.addEventListener("click", () => {
+      const consent = { analytics: false, marketing: false };
+      saveConsent(consent);
+      updateGoogleConsent(consent);
+      hide();
+    });
+
+    function init() {
+      const stored = getStoredConsent();
+      if (stored) {
+        hide();
+        updateGoogleConsent(stored);
+        if (stored.analytics) activateScripts("analytics");
+        if (stored.marketing) activateScripts("marketing");
+      } else {
+        show();
+      }
+    }
+
+    if (document.readyState === "loading") {
+      document.addEventListener("DOMContentLoaded", init);
+    } else {
+      init();
+    }
+    document.addEventListener("astro:page-load", init);
+  })();
+</script>

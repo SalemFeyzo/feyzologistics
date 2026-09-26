@@ -149,5 +149,11 @@
       "threads": "Feyzo on Threads"
     },
     "legalDisclaimer": "Feyzo Logistics provides integrated logistics solutions. Customs clearance operations are executed via our network of licensed customs brokers in accordance with Syrian regulations."
+  },
+  "CookieConsent": {
+    "bannerText": "We use cookies to improve your experience and analyse traffic. You can accept all or reject non-essential ones.",
+    "acceptAll": "Accept all",
+    "rejectAll": "Reject non-essential",
+    "ariaLabel": "Cookie consent"
   }
 }

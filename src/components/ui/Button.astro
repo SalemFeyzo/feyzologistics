@@ -5,6 +5,7 @@ type Variant = "default" | "outline" | "secondary" | "ghost" | "destructive" | "
 type Size = "default" | "xs" | "sm" | "lg" | "icon";
 
 interface Props {
+  id?: string;
   href?: string;
   type?: "button" | "submit" | "reset";
   variant?: Variant;
