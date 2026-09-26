@@ -40,10 +40,10 @@ export default defineConfig({
     locales: LOCALES,
     routing: {
       prefixDefaultLocale: true,
-      // ⚠️ Fix: prevents Astro from auto-redirecting `/` → `/ar`,
-      // which caused Bing to see `/ar` as a redirect and refuse
-      // to index it. Client-side redirect is handled by
-      // LOCALE_REDIRECT_SCRIPT in BaseLayout.astro.
+      // ⚠️ Fix: prevents Astro from auto-redirecting `/` → `/en`,
+      // which caused Bing to see the default-locale page as a
+      // redirect and refuse to index it. Client-side locale detection
+      // is handled by LOCALE_REDIRECT_SCRIPT in src/pages/index.astro.
       redirectToDefaultLocale: false,
     },
   },
@@ -81,6 +81,7 @@ export default defineConfig({
   // ═══════════════════════════════════════════════════════════
   integrations: [
     // Sitemap — unified i18n with Astro config.
+    // Excludes /404, /api/*, and the root `/` (noindex redirect page).
     // NOTE: priority/changefreq removed — Google ignores both since 2023.
     sitemap({
       i18n: {
@@ -90,8 +91,16 @@ export default defineConfig({
           en: 'en-US',
         },
       },
-      filter: (page) =>
-        !page.includes('/404') && !page.includes('/api/'),
+      filter: (page) => {
+        // استبعاد 404 و API
+        if (page.includes('/404') || page.includes('/api/')) return false;
+
+        // استبعاد الصفحة الجذرية (noindex redirect)
+        const pathname = new URL(page).pathname.replace(/\/$/, '');
+        if (pathname === '') return false;
+
+        return true;
+      },
       // lastmod is added automatically by @astrojs/sitemap.
     }),
 
